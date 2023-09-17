@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "accounts.apps.AccountsConfig",
+    "records.apps.RecordsConfig",
+    "timetable.apps.TimetableConfig",
     "rest_framework_simplejwt.token_blacklist",
     "rest_framework",
     "corsheaders",
