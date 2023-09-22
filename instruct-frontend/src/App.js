@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ContextProvider } from './components/customContexts';
+import Top from './pages/top';
+import Login from './pages/login';
+import Register from './pages/register';
+import ResetPassword from './pages/resetPassword';
+import ResetPasswordConfirm from './pages/resetPasswordConfirm';
+import NotFound from './pages/notFound';
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+  const defaultTheme = createTheme();
+  return(
+    <ThemeProvider theme={defaultTheme}>
+      <CssBaseline/>
+      <BrowserRouter>
+        <ContextProvider>
+          <Routes>
+            <Route path='/' element={<Top/>}/>
+            <Route path='/login' element={<Login/>}/>
+            <Route path='/register' element={<Register/>}/>
+            <Route path='/password/reset' element={<ResetPassword/>}/>
+            <Route path='/password/reset/confirm/:uid/:token' element={<ResetPasswordConfirm/>} />
+            <Route path="*" element={<NotFound />}/>
+          </Routes>
+        </ContextProvider>
+      </BrowserRouter>
+    </ThemeProvider>
+  )
 }
 
 export default App;
