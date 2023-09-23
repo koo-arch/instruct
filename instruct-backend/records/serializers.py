@@ -76,6 +76,9 @@ class CountUsersPropsSerializer(serializers.ModelSerializer):
 class CountUsersRecordSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     props = serializers.PrimaryKeyRelatedField(queryset=CountUsersProps.objects.all())
+    published_date = serializers.DateField(read_only=True)
+    published_time = serializers.TimeField(read_only=True)
+    created_at = serializers.DateTimeField(read_only=True)
     class Meta:
         model = CountUsersRecord
         fields = "__all__"

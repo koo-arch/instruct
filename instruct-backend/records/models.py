@@ -46,11 +46,13 @@ class CountUsersProps(models.Model):
 
 class CountUsersRecord(models.Model):
     props = models.ForeignKey(CountUsersProps, on_delete=models.PROTECT)
+    school_period = models.IntegerField()
     univ_users_num = models.IntegerField(default=0)
     own_users_num = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
+    published_date = models.DateField(auto_now_add=True)
+    published_time = models.TimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self) -> str:
-        return f"{self.place} {self.univ_users_num} {self.own_users_num}"
+        return f"{self.props} {self.univ_users_num} {self.own_users_num}"

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "timetable.apps.TimetableConfig",
     "rest_framework_simplejwt.token_blacklist",
     "rest_framework",
+    "django_filters",
     "corsheaders",
     "djoser",
 ]
@@ -138,6 +139,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
 }
 
 SIMPLE_JWT = {
@@ -180,6 +184,8 @@ DJOSER = {
     'SET_USERNAME_RETYPE': True,
     # パスワード変更時に確認用パスワード必須
     'SET_PASSWORD_RETYPE': True,
+    # パスワードリセット時に確認用パスワード必須
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
     # アカウント本登録用URL
     'ACTIVATION_URL': 'activate/{uid}/{token}',
     # メールアドレスリセット完了用URL
