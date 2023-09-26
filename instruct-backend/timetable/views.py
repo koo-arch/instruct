@@ -35,9 +35,8 @@ class CurrentTimeTableView(generics.RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
 
         queryset = self.queryset
-        date = datetime.now()
-        now = date.time()
-        current_timetable = get_object_or_404(queryset, start_time__lte=now, end_time__gt=now)
+        current_time = datetime.now().time()
+        current_timetable = get_object_or_404(queryset, start_time__lte=current_time, end_time__gt=current_time)
 
         serializer = self.get_serializer(current_timetable)
         return Response(serializer.data)

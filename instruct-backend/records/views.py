@@ -1,4 +1,6 @@
 from django.http import QueryDict
+from django.shortcuts import get_object_or_404
+from datetime import datetime
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions, generics, status
 from rest_framework.response import Response
@@ -7,6 +9,7 @@ from instruct.permissons import IsAdminUserOrReadOnly, IsAuthenticatedOrReadOnly
 from .models import PatrolPlaces, PatrolRecord, CountUsersProps, CountUsersRecord
 from .serializers import PatrolPlaceSerializer, PatrolRecordSerializer, CountUsersPropsSerializer, CountUsersRecordSerializer
 from .filters import CountUsersRecordFilter
+from timetable.models import TimeTable
 
 
 
@@ -140,6 +143,24 @@ class CountUsersRecordListView(generics.ListCreateAPIView):
     filter_backends = [DjangoFilterBackend]
     serializer_class = CountUsersRecordSerializer
     filterset_class = CountUsersRecordFilter
+
+
+class CurrentCountUsersRecordView(generics.ListAPIView):
+    permission_classes = (permissions.AllowAny,)
+    queryset = CountUsersRecord.objects.all()
+    serializer_class = CountUsersRecordSerializer
+
+    def get_queryset(self):
+        now = datetime.now()
+        current_time = now.time()
+        current_date = now.date()
+
+        timetable = TimeTable.objects.all()
+        current_timetable = get_object_or_404(timetable, start_time__lte=current_time, end_time__gt=current_time)
+        school_period = current_timetable.school_period
+
+        return CountUsersRecord.objects.filter(published_date=current_date, school_period=school_period)
+
 
 
 class CountUsersRecordDetailView(generics.RetrieveUpdateDestroyAPIView):
