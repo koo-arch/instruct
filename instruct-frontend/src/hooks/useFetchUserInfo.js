@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { useCustomContext } from '../components/customContexts';
 import useAuthAxios from './useAuthAxios';
@@ -7,20 +8,20 @@ import { loginSuccess } from '../redux/authSlice';
 import urls from '../api/urls';
 
 
-const useGetUserInfo = () => {
+const useFetchUserInfo = () => {
     const [cookies, ] = useCookies(["accesstoken", "refreshtoken"]);
     const authAxios = useAuthAxios();
     const { setSnackbarStatus } = useCustomContext();
     const dispatch = useDispatch();
     const logout = useLogout();
 
-    const getUserInfo = async () => {
+    const fetchUserInfo = async () => {
         return await authAxios.get(urls.UserInfo)
     }
 
-    const onSubmit = () => {
+    useEffect(() => {
         if (!!cookies.accesstoken) {
-            getUserInfo()
+            fetchUserInfo()
                 .then(res => {
                     dispatch(loginSuccess({ 
                         username: res.data.username,
@@ -30,7 +31,6 @@ const useGetUserInfo = () => {
                 .catch(err => {
                     logout();
                     console.log(err)
-                    console.log(err.response.data)
                     setSnackbarStatus({
                         open: true,
                         severity: "error",
@@ -38,9 +38,9 @@ const useGetUserInfo = () => {
                     });
                 })
         }
-    }
+    },[dispatch])
 
-    return onSubmit;
+    return null;
 }
 
-export default useGetUserInfo;
+export default useFetchUserInfo;

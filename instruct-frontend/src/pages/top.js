@@ -1,23 +1,22 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import useGetUserInfo from '../hooks/useGetUserInfo';
-import useCurrentTimetable from '../hooks/useCurrentTimetable';
+import { useSelector } from 'react-redux';
+import PatrolStatus from '../features/patrolStatus';
+import CountUsersStatus from '../features/countUsersStatus';
+import useFetchUserInfo from '../hooks/useFetchUserInfo';
 import useLogout from '../hooks/useLogout';
 
 const Top = () => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     const user = useSelector((state) => state.auth.user);
-    const schoolPeriod = useCurrentTimetable();
-    const getUserInfo = useGetUserInfo();
     const logout = useLogout();
 
-    useEffect(() => {
-        getUserInfo();
-    },[])
+    useFetchUserInfo();
 
     return (
         <div>
+            <PatrolStatus/>
+            <CountUsersStatus/>
             {isAuthenticated ? 
                 <div>
                     <p>ログイン中: {user.username} {user.email}</p>
@@ -29,7 +28,6 @@ const Top = () => {
                     <Link to={'/login'}>ログイン</Link>
                 </div>
             }
-            <p>{schoolPeriod}</p>
         </div>
     )
 }
