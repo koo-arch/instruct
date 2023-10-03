@@ -1,6 +1,14 @@
 const urls = {
     Timetable: `/timetable/`,
     CurrentTimetable: `/timetable/current/`,
+    
+    PatrolPlaces: `/patrol/places/`,
+    PatrolRecord: `/patrol/record/`,
+    PatrolStatus: `/patrol/status/`,
+    CountUsersProps: `/count/users/props/`,
+    CountUsersRecord: `/count/users/record/`,
+    CountUsersStatus: `/count/users/status/`,
+
     Register: `/auth/users/`,
     UserInfo: `/auth/users/me/`,
     Login: `/auth/jwt/create/`,

@@ -9,7 +9,7 @@ from instruct.permissons import IsAdminUserOrReadOnly, IsAuthenticatedOrReadOnly
 from .models import PatrolPlaces, PatrolRecord, CountUsersProps, CountUsersRecord
 from .serializers import PatrolPlaceSerializer, PatrolRecordSerializer, CountUsersPropsSerializer, CountUsersRecordSerializer
 from .filters import CountUsersRecordFilter
-from timetable.models import TimeTable
+from timetable.utils import get_current_school_period
 
 
 
@@ -84,21 +84,47 @@ class PatrolRecordListView(generics.ListCreateAPIView):
         return processed_querydict
 
 
-class CurrentPatrolRecordView(generics.ListAPIView):
+class PatrolStatusView(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)
-    queryset = PatrolRecord.objects.all()
     serializer_class = PatrolRecordSerializer
 
     def get_queryset(self):
         now = datetime.now()
-        current_time = now.time()
+        current_hour = now.hour
+        AM_or_PM = '午前' if current_hour < 12 else '午後'
 
-        if current_time.hour < 12:
-            queryset = PatrolRecord.objects.filter(published_date=now.date(), AM_or_PM="午前")
-        else:
-            queryset = PatrolRecord.objects.filter(published_date=now.date(), AM_or_PM="午後")
+        # PatrolRecordモデルから条件に合致するレコードを検索
+        queryset = PatrolRecord.objects.filter(
+            published_date=now.date(),
+            AM_or_PM=AM_or_PM
+        )
 
         return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        patrol_status = []
+        places = PatrolPlaces.objects.filter(is_active=True)
+
+        for place in places:
+            # 条件に合致するレコードが存在する場合はTrue、存在しない場合はFalseを格納
+            search_records = queryset.filter(place=place)
+
+            # ２回目の巡回がある場合、レコードが2つ以上でTrue
+            if place.is_pm_rounds_twice:
+                # 登録した時限中はTrueになる様にしたいが、１回目だと問答無用でfalseになる
+                is_completed = len(search_records) > 1
+            else:
+                is_completed = search_records.exists()
+                
+            patrol_status.append({
+                "id": place.pk,
+                "place": place.name, 
+                "is_completed": is_completed
+            })
+
+        return Response(patrol_status, status=status.HTTP_200_OK)
+
 
 
 class PatrolRecordDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -145,22 +171,35 @@ class CountUsersRecordListView(generics.ListCreateAPIView):
     filterset_class = CountUsersRecordFilter
 
 
-class CurrentCountUsersRecordView(generics.ListAPIView):
+class CountUsersStatusView(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)
-    queryset = CountUsersRecord.objects.all()
-    serializer_class = CountUsersRecordSerializer
+    serializer_class = PatrolRecordSerializer
 
     def get_queryset(self):
-        now = datetime.now()
-        current_time = now.time()
-        current_date = now.date()
+        today = datetime.now().date()
+        current_school_period = get_current_school_period()
 
-        timetable = TimeTable.objects.all()
-        current_timetable = get_object_or_404(timetable, start_time__lte=current_time, end_time__gt=current_time)
-        school_period = current_timetable.school_period
+        queryset = CountUsersRecord.objects.filter(
+            published_date=today,
+            school_period=current_school_period
+        )
+        return queryset
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        count_users_status = []
+        props = CountUsersProps.objects.filter(is_active=True)
 
-        return CountUsersRecord.objects.filter(published_date=current_date, school_period=school_period)
+        for prop in props:
+            is_completed = queryset.filter(props=prop).exists()
 
+            count_users_status.append({
+                "id": prop.pk,
+                "place": prop.place + prop.room_type,
+                "is_completed": is_completed
+            })
+
+        return Response(count_users_status, status=status.HTTP_200_OK)
 
 
 class CountUsersRecordDetailView(generics.RetrieveUpdateDestroyAPIView):

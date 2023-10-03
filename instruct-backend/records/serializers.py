@@ -108,8 +108,8 @@ class CountUsersRecordSerializer(serializers.ModelSerializer):
         if not is_active:
             raise serializers.ValidationError("指定された巡回場所はアクティブではありません。")
         
-        univ_users_num = data.get("univ_users_num")
-        own_users_num = data.get("own_users_num")
+        univ_users_num = data.get("univ_users_num", 0)
+        own_users_num = data.get("own_users_num", 0)
 
         if seats_num < univ_users_num + own_users_num:
             raise serializers.ValidationError("入力席数の合計が利用可能数を超えています。")

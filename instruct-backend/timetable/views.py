@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from instruct.permissons import IsAdminUserOrReadOnly
 from .models import TimeTable
 from .serializers import TimeTableSerializer
+from .utils import get_current_school_period
 
 
 
@@ -33,10 +34,8 @@ class CurrentTimeTableView(generics.RetrieveAPIView):
     serializer_class = TimeTableSerializer
 
     def retrieve(self, request, *args, **kwargs):
-
-        queryset = self.queryset
-        current_time = datetime.now().time()
-        current_timetable = get_object_or_404(queryset, start_time__lte=current_time, end_time__gt=current_time)
-
-        serializer = self.get_serializer(current_timetable)
-        return Response(serializer.data)
+        
+        current_school_period = get_current_school_period()
+        school_period = {"school_period": current_school_period}
+        
+        return Response(school_period, status=status.HTTP_200_OK)

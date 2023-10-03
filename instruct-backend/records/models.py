@@ -13,7 +13,7 @@ class PatrolPlaces(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self) -> str:
-        return self.place
+        return self.name
 
 
 class PatrolRecord(models.Model):
