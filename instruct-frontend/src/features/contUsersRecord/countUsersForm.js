@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import { InputLabel, FormControl, MenuItem, Select, TextField } from '@mui/material';
+import NumberInput from '../../components/numberInput';
+import { FormControl, MenuItem, TextField } from '@mui/material';
 
 const CountUsersForm = () => {
     const { control, register } = useFormContext();
@@ -25,7 +26,7 @@ const CountUsersForm = () => {
             item.place === selectedPlace && item.room_type === selectedRoomType
     )
     const selectedId = selectedObject?.id;
-    const selectedSeatsNum = selectedObject?.seats_num;
+    const selectedSeatsNum = selectedObject?.seats_num ?? 0;
 
     const handlePlaceChange = (e) => {
         setSelectedPlace(e.target.value);
@@ -106,10 +107,35 @@ const CountUsersForm = () => {
                 />
             )}
 
-            
-            {selectedSeatsNum && 
+    
             <p>{selectedSeatsNum}</p>
-            }
+
+            <Controller
+                name="univ_users_num"
+                control={control}
+                defaultValue={0}
+                render={({ field: { value, onChange } }) => (
+                    <NumberInput
+                        value={value}
+                        onChange={onChange}
+                        label="大学PC利用者数"
+                        max={selectedSeatsNum}
+                    />
+                )}
+            />
+            <Controller
+                name="own_users_num"
+                control={control}
+                defaultValue={0}
+                render={({ field: { value, onChange } }) => (
+                    <NumberInput
+                        value={value}
+                        onChange={onChange}
+                        label="私物PC利用者数"
+                        max={selectedSeatsNum}
+                    />
+                )}
+            />
         </div>
     );
 }
