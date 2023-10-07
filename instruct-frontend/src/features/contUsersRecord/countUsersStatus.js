@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import useCurrentTimetable from '../hooks/useCurrentTimetable';
-import useFetchCountUsersStatus from '../hooks/useFetchCountUsersStatus';
-import Loading from '../components/loading';
-import StatusField from './statusField';
+import useCurrentTimetable from '../../hooks/useCurrentTimetable';
+import useFetchCountUsersStatus from '../../hooks/useFetchCountUsersStatus';
+import Loading from '../../components/loading';
+import StatusField from '../statusField';
 
 const CountUsersStatus = () => {
     const currentTimetable = useSelector(state => state.currentTimetable);

@@ -8,20 +8,22 @@ const useFetchCountUsersProps = () => {
     const dispatch = useDispatch();
 
     const fetchCountUsersProps = async () => {
-        return await axios.get(urls.CountUsersProps);
-    }
+        try {
+            const res = await axios.get(urls.CountUsersProps);
+            dispatch(countUsersPropsFetchSuccess(res.data));
+            return res.data;
+        } catch (err) {
+            dispatch(countUsersPropsFetchFailure(err.message));
+            throw err;
+        }
+    };
 
     useEffect(() => {
-        fetchCountUsersProps()
-            .then(res => {
-                dispatch(countUsersPropsFetchSuccess(res.data))
-            })
-            .catch(err => {
-                dispatch(countUsersPropsFetchFailure(err.message))
-            })
-    }, [dispatch])
+        fetchCountUsersProps();
+    }, [dispatch]);
 
-    return null;
+    // 非同期データの読み込みを待機できるように、fetchCountUsersProps 関数を直接返す
+    return fetchCountUsersProps;
 }
 
 export default useFetchCountUsersProps;

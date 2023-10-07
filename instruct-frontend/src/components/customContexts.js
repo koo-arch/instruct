@@ -17,11 +17,15 @@ export const ContextProvider = ({ children }) => {
 
     const [postFlag, setPostFlag] = useState(false);
 
+    const [seatsNum, setSeatsNum] = useState(0);
+
     const value = {
         postFlag,
         setPostFlag,
         snackbarStatus,
         setSnackbarStatus,
+        seatsNum,
+        setSeatsNum,
     };
     return (
         <CustomContext.Provider value={value}>{children}</CustomContext.Provider>
