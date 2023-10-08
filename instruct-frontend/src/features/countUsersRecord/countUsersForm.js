@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import NumberInput from '../../components/numberInput';
 import DropdownSelect from '../../components/dropdownSelect';
 import useDropdownLogic from '../../hooks/useDropdownLogic';
-import { FormControl, MenuItem, TextField } from '@mui/material';
+import { FormControl } from '@mui/material';
 
 const CountUsersForm = () => {
     const { control, register } = useFormContext();
@@ -27,6 +27,7 @@ const CountUsersForm = () => {
     )
     const selectedId = selectedObject?.id;
     const selectedSeatsNum = selectedObject?.seats_num ?? 0;
+    const isCountOwnPC = selectedObject?.is_count_own_pc ?? false;
 
 
     return (
@@ -95,6 +96,7 @@ const CountUsersForm = () => {
                     />
                 )}
             />
+            {isCountOwnPC && 
             <Controller
                 name="own_users_num"
                 control={control}
@@ -108,6 +110,7 @@ const CountUsersForm = () => {
                     />
                 )}
             />
+            }
         </div>
     );
 }

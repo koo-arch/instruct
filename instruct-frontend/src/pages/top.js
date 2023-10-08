@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import PatrolStatus from '../features/patrolStatus';
-import CountUsersStatus from '../features/contUsersRecord/countUsersStatus';
+import CountUsersStatus from '../features/countUsersRecord/countUsersStatus';
 import useFetchUserInfo from '../hooks/useFetchUserInfo';
 import useLogout from '../hooks/useLogout';
 
