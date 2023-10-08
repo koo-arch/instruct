@@ -3,7 +3,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { useCustomContext } from '../../components/customContexts';
 import useAuthAxios from '../../hooks/useAuthAxios';
 import urls from '../../api/urls';
-import Dropdown from './countUsersForm';
+import CountUsersCreateForm from './countUsersCreateForm';
 import AddIcon from '@mui/icons-material/Add';
 import { Fab } from '@mui/material';
 import FormDialog from '../../components/formDialog';
@@ -63,7 +63,7 @@ const CreateCountUsersRecord = (props) => {
             >
                 <FormProvider {...useFormMethods}>
                     <form id="dialog-form" onSubmit={handleSubmit(onSubmit)}>
-                        <Dropdown/>
+                        <CountUsersCreateForm/>
                     </form>
                 </FormProvider>
             </FormDialog>
