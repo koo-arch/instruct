@@ -16,31 +16,31 @@ const useFetchUserInfo = () => {
     const logout = useLogout();
 
     const fetchUserInfo = async () => {
-        return await authAxios.get(urls.UserInfo)
+        try {
+            const res = await authAxios.get(urls.UserInfo)
+            dispatch(loginSuccess({
+                username: res.data.username,
+                email: res.data.email,
+            }));
+            return res.data
+        } catch (err) {
+            logout();
+            console.log(err);
+            setSnackbarStatus({
+                open: true,
+                severity: "error",
+                message: `エラーが発生しました。再度ログインしてください。(code:${err.response.status})`,
+            });
+        }
     }
 
     useEffect(() => {
         if (!!cookies.accesstoken) {
             fetchUserInfo()
-                .then(res => {
-                    dispatch(loginSuccess({ 
-                        username: res.data.username,
-                        email: res.data.email,
-                    }));
-                })
-                .catch(err => {
-                    logout();
-                    console.log(err)
-                    setSnackbarStatus({
-                        open: true,
-                        severity: "error",
-                        message: `エラーが発生しました。再度ログインしてください。(code:${err.response.status})`,
-                    });
-                })
         }
     },[dispatch])
 
-    return null;
+    return fetchUserInfo;
 }
 
 export default useFetchUserInfo;

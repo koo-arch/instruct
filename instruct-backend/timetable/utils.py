@@ -2,7 +2,7 @@ from django.http import QueryDict
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from rest_framework import status
-from django.db.models import Max, Min, F
+from django.db.models import Max, Min
 from .models import TimeTable
 from datetime import datetime, time
 

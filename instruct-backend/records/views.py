@@ -1,9 +1,7 @@
-from django.http import QueryDict
-from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions, generics, status
 from rest_framework.response import Response
-from datetime import datetime, time
+from datetime import datetime
 from instruct.permissons import IsAdminUserOrReadOnly, IsAuthenticatedOrReadOnly
 from .models import PatrolPlaces, PatrolRecord, CountUsersProps, CountUsersRecord
 from .serializers import PatrolPlaceSerializer, PatrolRecordSerializer, CountUsersPropsSerializer, CountUsersRecordSerializer
@@ -53,11 +51,11 @@ class PatrolRecordListView(generics.ListCreateAPIView):
 
         # dataにschool_periodフィールドを追加
         current_school_period = school_period_manager.get_current_school_period()
-        added_data = school_period_manager.add_data_to_Querydict(data, "school_period", current_school_period)
+        added_school_period_data = school_period_manager.add_data_to_Querydict(data, "school_period", current_school_period)
 
         # AM_or_PMフィールドを追加
         AM_or_PM = school_period_manager.judge_AM_or_PM() 
-        processed_data = school_period_manager.add_data_to_Querydict(added_data, "AM_or_PM", AM_or_PM)
+        processed_data = school_period_manager.add_data_to_Querydict(added_school_period_data, "AM_or_PM", AM_or_PM)
 
         serializer = self.get_serializer(data=processed_data)
         if serializer.is_valid():
@@ -186,14 +184,14 @@ class CountUsersStatusView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         count_users_status = []
-        props = CountUsersProps.objects.filter(is_active=True)
+        props_list = CountUsersProps.objects.filter(is_active=True)
 
-        for prop in props:
-            is_completed = queryset.filter(props=prop).exists()
+        for props in props_list:
+            is_completed = queryset.filter(props=props).exists()
 
             count_users_status.append({
-                "id": prop.pk,
-                "place": prop.place + prop.room_type,
+                "id": props.pk,
+                "place": props.place + props.room_type,
                 "is_completed": is_completed
             })
 

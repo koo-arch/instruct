@@ -8,20 +8,22 @@ const useFetchPatrolPlaces = () => {
     const dispatch = useDispatch();
 
     const fetchPatrolPlaces = async () => {
-        return await axios.get(urls.PatrolPlaces)
+        try {
+            res = await axios.get(urls.PatrolPlaces);
+            dispatch(patrolPlacesFetchSuccess(res.data));
+            return res.data;
+        } catch (err) {
+            dispatch(patrolPlacesFetchFailure(err.message))
+            throw err;
+        }
     }
 
     useEffect(() => {
-        fetchPatrolPlaces()
-            .then(res => {
-                dispatch(patrolPlacesFetchSuccess(res.data));
-            })
-            .catch(err => {
-                dispatch(patrolPlacesFetchFailure(err.message));
-            })
+        fetchPatrolPlaces();
     }, [dispatch])
 
-    return null;
+    // 非同期データの読み込みを待機できるように、fetchPatrolPlacesを直接返す
+    return fetchPatrolPlaces;
 }
 
 export default useFetchPatrolPlaces;
