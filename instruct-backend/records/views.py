@@ -1,6 +1,5 @@
 from django.http import QueryDict
 from django.shortcuts import get_object_or_404
-from datetime import datetime
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions, generics, status
 from rest_framework.response import Response
@@ -9,7 +8,7 @@ from instruct.permissons import IsAdminUserOrReadOnly, IsAuthenticatedOrReadOnly
 from .models import PatrolPlaces, PatrolRecord, CountUsersProps, CountUsersRecord
 from .serializers import PatrolPlaceSerializer, PatrolRecordSerializer, CountUsersPropsSerializer, CountUsersRecordSerializer
 from .filters import CountUsersRecordFilter
-from timetable.utils import get_current_school_period
+from timetable.utils import SchoolPeriodManager
 
 
 
@@ -49,39 +48,22 @@ class PatrolRecordListView(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        processed_data = self.process_data(data)
 
-        if not processed_data:
-            return Response({"error": "授業時間外です。"}, status=status.HTTP_400_BAD_REQUEST)
+        school_period_manager = SchoolPeriodManager()
+
+        # dataにschool_periodフィールドを追加
+        current_school_period = school_period_manager.get_current_school_period()
+        added_data = school_period_manager.add_data_to_Querydict(data, "school_period", current_school_period)
+
+        # AM_or_PMフィールドを追加
+        AM_or_PM = school_period_manager.judge_AM_or_PM() 
+        processed_data = school_period_manager.add_data_to_Querydict(added_data, "AM_or_PM", AM_or_PM)
 
         serializer = self.get_serializer(data=processed_data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def process_data(self, data):
-        """
-        現在時刻から午前、午後を判定したデータを追加
-        """
-        AM_or_PM = ""
-        current_time = datetime.now().time()
-        AM_start, AM_end = time(9, 0, 0), time(12, 0, 0)
-        PM_start, PM_end = time(12, 0, 0), time(18, 0, 0)
-
-        if AM_start <= current_time < AM_end:
-            AM_or_PM = "午前"
-        elif PM_start <= current_time < PM_end:
-            AM_or_PM = "午後"
-        else:
-            return None
-
-        processed_data = dict(data)  # QueryDictを辞書に変換
-        processed_data["AM_or_PM"] = AM_or_PM
-        processed_querydict = QueryDict('', mutable=True)
-        processed_querydict.update(processed_data)  # 辞書をQueryDictに変換
-
-        return processed_querydict
 
 
 class PatrolStatusView(generics.ListAPIView):
@@ -90,8 +72,9 @@ class PatrolStatusView(generics.ListAPIView):
 
     def get_queryset(self):
         now = datetime.now()
-        current_hour = now.hour
-        AM_or_PM = '午前' if current_hour < 12 else '午後'
+
+        school_period_manager = SchoolPeriodManager()
+        AM_or_PM = school_period_manager.judge_AM_or_PM()
 
         # PatrolRecordモデルから条件に合致するレコードを検索
         queryset = PatrolRecord.objects.filter(
@@ -170,6 +153,20 @@ class CountUsersRecordListView(generics.ListCreateAPIView):
     serializer_class = CountUsersRecordSerializer
     filterset_class = CountUsersRecordFilter
 
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        school_period_manager = SchoolPeriodManager()
+        current_school_period = school_period_manager.get_current_school_period()
+        processed_data = school_period_manager.add_data_to_Querydict(data, "school_period", current_school_period)
+
+        serializer = self.get_serializer(data=processed_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
 
 class CountUsersStatusView(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)
@@ -177,7 +174,8 @@ class CountUsersStatusView(generics.ListAPIView):
 
     def get_queryset(self):
         today = datetime.now().date()
-        current_school_period = get_current_school_period()
+        school_period_manager = SchoolPeriodManager()
+        current_school_period = school_period_manager.get_current_school_period()
 
         queryset = CountUsersRecord.objects.filter(
             published_date=today,

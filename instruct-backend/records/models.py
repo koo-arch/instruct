@@ -21,6 +21,7 @@ class PatrolRecord(models.Model):
     巡回時間記録
     """
     place = models.ForeignKey(PatrolPlaces, on_delete=models.PROTECT)
+    school_period = models.IntegerField()
     published_date = models.DateField(auto_now_add=True)
     published_time = models.TimeField(auto_now_add=True)
     AM_or_PM = models.CharField(max_length=10)
