@@ -2,23 +2,23 @@ import React, { useState } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import NumberInput from '../../components/numberInput';
+import DropdownSelect from '../../components/dropdownSelect';
+import useDropdownLogic from '../../hooks/useDropdownLogic';
 import { FormControl, MenuItem, TextField } from '@mui/material';
 
 const CountUsersForm = () => {
     const { control, register } = useFormContext();
     const countUsersPlaces = useSelector(state => state.countUsersProps.places);
-    const [selectedPlace, setSelectedPlace] = useState('');
-    const [selectedRoomType, setSelectedRoomType] = useState('');
 
-    const places = [...new Set(countUsersPlaces.map(item => item.place))];
-    // selectedPlaceに基づいて選択肢をフィルタリング
-    const roomTypesForSelectedPlace = Array.from(
-        new Set(
-            countUsersPlaces
-                .filter((item) => item.place === selectedPlace)
-                .map((item) => item.room_type)
-        )
-    );
+    const {
+        selectedPlace,
+        selectedRoomType,
+        places,
+        roomTypesForSelectedPlace,
+        handlePlaceChange,
+        handleRoomTypeChange,
+    } = useDropdownLogic(countUsersPlaces);
+
 
     // 選択された場所と部屋タイプに対応するオブジェクトのIDを取得
     const selectedObject = countUsersPlaces.find(
@@ -28,16 +28,6 @@ const CountUsersForm = () => {
     const selectedId = selectedObject?.id;
     const selectedSeatsNum = selectedObject?.seats_num ?? 0;
 
-    const handlePlaceChange = (e) => {
-        setSelectedPlace(e.target.value);
-        // 選択したとき、部屋タイプをリセット
-        setSelectedRoomType('');
-    };
-
-    const handleRoomTypeChange = (e) => {
-        setSelectedRoomType(e.target.value);
-    };
-
 
     return (
         <div>
@@ -45,26 +35,17 @@ const CountUsersForm = () => {
                 <Controller
                     name="place"
                     control={control}
-                    defaultValue="" 
+                    defaultValue=""
                     render={({ field }) => (
-                        <TextField
-                            select
-                            required
+                        <DropdownSelect
                             label="場所"
                             value={selectedPlace}
-                            margin='normal'
                             onChange={(e) => {
-                                field.onChange(e); // 値を更新
-                                handlePlaceChange(e); // 選択時の処理を呼び出す
+                                field.onChange(e);
+                                handlePlaceChange(e);
                             }}
-                        >
-                            <MenuItem value="">選択してください</MenuItem>
-                            {places.map((place, index) => (
-                                <MenuItem key={index} value={place}>
-                                    {place}
-                                </MenuItem>
-                            ))}
-                        </TextField>
+                            options={places}
+                        />
                     )}
                 />
             </FormControl>
@@ -75,24 +56,15 @@ const CountUsersForm = () => {
                     control={control}
                     defaultValue=""
                     render={({ field }) => (
-                        <TextField
-                            select
-                            required
+                        <DropdownSelect
                             label="教室タイプ"
-                            margin='normal'
                             value={selectedRoomType}
                             onChange={(e) => {
-                                field.onChange(e); // 値を更新
-                                handleRoomTypeChange(e); // 選択時の処理を呼び出す
+                                field.onChange(e);
+                                handleRoomTypeChange(e);
                             }}
-                        >
-                            <MenuItem value="">選択してください</MenuItem>
-                            {roomTypesForSelectedPlace.map((type, index) => (
-                                <MenuItem key={index} value={type}>
-                                    {type}
-                                </MenuItem>
-                            ))}
-                        </TextField>
+                            options={roomTypesForSelectedPlace}
+                        />
                     )}
                 />
             </FormControl>
