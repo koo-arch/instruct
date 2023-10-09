@@ -1,6 +1,6 @@
 from django.http import QueryDict
 from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
+from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Max, Min
 from .models import TimeTable
@@ -23,7 +23,7 @@ class SchoolPeriodManager:
             school_period = current_timetable.school_period
             return school_period
         else:
-            return JsonResponse({"error": "授業時間外です。"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "授業時間外です。"}, status=status.HTTP_400_BAD_REQUEST)
 
     def judge_AM_or_PM(self):
         queryset = self.queryset
@@ -35,7 +35,6 @@ class SchoolPeriodManager:
 
         start_school = queryset.filter(school_period=min_school_period)[0].start_time
         end_school = queryset.filter(school_period=max_school_period)[0].end_time
-        print(start_school)
         noon = time(12, 0, 0)
 
         if start_school <= current_time < noon:
@@ -43,7 +42,7 @@ class SchoolPeriodManager:
         elif noon <= current_time < end_school:
             AM_or_PM = "午後"
         else:
-            return JsonResponse({"error": "授業時間外です。"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "授業時間外です。"}, status=status.HTTP_400_BAD_REQUEST)
         
         return AM_or_PM
         

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ContextProvider } from './components/customContexts';
+import ResponsiveDrawer from './components/responsiveDrawer';
 import Top from './pages/top';
 import Login from './pages/login';
 import Register from './pages/register';
@@ -18,17 +19,19 @@ const App = () => {
       <CssBaseline/>
       <BrowserRouter>
         <ContextProvider>
-          <Routes>
-            <Route path='/' element={<Top/>}/>
-            <Route path='/login' element={<Login/>}/>
-            <Route path='/register' element={<Register/>}/>
-            <Route path='/password/reset' element={<ResetPassword/>}/>
-            <Route path='/password/reset/confirm/:uid/:token' element={<ResetPasswordConfirm/>} />
+          <ResponsiveDrawer>
+            <Routes>
+              <Route path='/' element={<Top/>}/>
+              <Route path='/login' element={<Login/>}/>
+              <Route path='/register' element={<Register/>}/>
+              <Route path='/password/reset' element={<ResetPassword/>}/>
+              <Route path='/password/reset/confirm/:uid/:token' element={<ResetPasswordConfirm/>} />
 
 
-            <Route path="/records" element={<Records/>}/>
-            <Route path="*" element={<NotFound />}/>
-          </Routes>
+              <Route path="/records" element={<Records/>}/>
+              <Route path="*" element={<NotFound />}/>
+            </Routes>
+          </ResponsiveDrawer>
         </ContextProvider>
       </BrowserRouter>
     </ThemeProvider>
