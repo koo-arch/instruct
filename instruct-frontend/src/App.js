@@ -13,9 +13,22 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const App = () => {
-  const defaultTheme = createTheme();
+  const theme = createTheme({
+    typography: {
+      fontFamily: [
+        'Roboto',
+        '"Noto Sans JP"',
+        '"Helvetica"',
+        'Arial',
+        'sans-serif',
+      ].join(','),
+      button: {
+        fontWeight: 'bold', // ボタンのテキストのフォントウェイトを太くする
+      },
+    },
+  });
   return(
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline/>
       <BrowserRouter>
         <ContextProvider>

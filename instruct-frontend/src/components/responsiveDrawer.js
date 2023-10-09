@@ -132,7 +132,7 @@ const ResponsiveDrawer = ({ children }) => {
                 <Drawer
                     variant="permanent"
                     sx={{
-                        display: { sm: 'none', md: 'block' },
+                        display: { xs: 'none', md: 'block' },
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
                     }}
                     open

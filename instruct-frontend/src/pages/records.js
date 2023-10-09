@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useSelector } from 'react-redux';
 import CreateCountUsersRecord from '../features/countUsersRecord/createCountUsersRecord';
 import CustomSnackbar from '../components/customSnackbar';
 import { Container, useMediaQuery, Typography, Grid, Fab } from '@mui/material';
@@ -6,6 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useCustomContext } from '../components/customContexts';
 
 const Records = () => {
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
     const { snackbarStatus } = useCustomContext();
     const isMobileSize = useMediaQuery('(max-width: 500px');
     const openRef = useRef();
@@ -20,7 +22,7 @@ const Records = () => {
                             利用人数記録表
                         </Typography>
                     </Grid>
-                    {!isMobileSize &&
+                    {isAuthenticated && !isMobileSize &&
                         <Grid>
                             <Fab color='primary' variant='extended' onClick={openCreateRecord}>
                                 <AddIcon sx={{ mr: 1 }} />
@@ -31,6 +33,7 @@ const Records = () => {
                 </Grid>
             </Container>
             <CreateCountUsersRecord create={openRef}/>
+            <CustomSnackbar {...snackbarStatus} />
         </div>
     )
 }

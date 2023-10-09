@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useCustomContext } from '../../components/customContexts';
 import useAuthAxios from '../../hooks/useAuthAxios';
@@ -8,9 +9,12 @@ import AddIcon from '@mui/icons-material/Add';
 import { Fab } from '@mui/material';
 import FormDialog from '../../components/formDialog';
 import useFetchCountUsersProps from '../../hooks/useFetchCountUsersPrpps';
+import CustomSnackbar from '../../components/customSnackbar';
+import '../../styles/styles.css';
 
 const CreateCountUsersRecord = (props) => {
     const { create } = props;
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const useFormMethods = useForm();
     const { register, setValue, getValues, handleSubmit, formState: { errors } } = useFormMethods;
     const authAxios = useAuthAxios();
@@ -50,11 +54,13 @@ const CreateCountUsersRecord = (props) => {
     }
     return (
         <div>
+            {isAuthenticated && 
             <div className='fab-container'>
                 <Fab color="primary" onClick={openDialog} ref={create}>
                     <AddIcon fontSize='large' />
                 </Fab>
             </div>
+            }
             <FormDialog
                 open={dialogIsOpen}
                 onClose={closeDialog}
@@ -63,7 +69,7 @@ const CreateCountUsersRecord = (props) => {
             >
                 <FormProvider {...useFormMethods}>
                     <form id="dialog-form" onSubmit={handleSubmit(onSubmit)}>
-                        <CountUsersCreateForm/>
+                        <CountUsersCreateForm />
                     </form>
                 </FormProvider>
             </FormDialog>

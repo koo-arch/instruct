@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import useLogout from '../hooks/useLogout';
 import { IconButton, Menu, MenuItem, Button } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -8,6 +8,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 const AccountButton = () => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const [anchorEl, setAnchorEl] = useState(null);
+    const location = useLocation();
     const logout = useLogout();
 
     const handleMenu = (e) => {
@@ -17,9 +18,34 @@ const AccountButton = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const sginButton = (
+        location.pathname === "/login" ?
+            <Button
+                color='inherit'
+                variant="outlined"
+                component={Link}
+                to={"/register"}
+            >
+                新規登録
+            </Button>
+            :
+            <Button
+                variant="contained"
+                sx={{
+                    background: "#ffffff",
+                    color: '#3f50b5',
+                    ":hover": { background: "#ffffff" },
+                }}
+                component={Link}
+                to={"/login"}
+            >
+                ログイン
+            </Button>
+    )
     return (
         <div>
-            {isAuthenticated && 
+            {isAuthenticated ?
             <div>
                 <IconButton
                     size="large"
@@ -58,20 +84,12 @@ const AccountButton = () => {
                         ログアウト
                     </MenuItem>
                 </Menu>
-            </div>
-            }
-            {!isAuthenticated &&
-            <Button
-                color='inherit'
-                variant="outlined"
-                component={Link}
-                to={"/login"}
-            >
-                ログイン
-            </Button>
+            </div> 
+            :
+            sginButton
             }
         </div>
-  )
+    )
 }
 
 export default AccountButton;

@@ -18,20 +18,15 @@ import {
 } from "@mui/material";
 import CustomLink from "../components/CustomLink";
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-
 
 const Register = () => {
     const navigation = useNavigate();
     const { snackbarStatus, setSnackbarStatus } = useCustomContext();
     const { register, handleSubmit, getValues, clearErrors, setError, formState: { errors }, } = useForm();
-    const defaultTheme = createTheme();
-
 
     const postRegister = async (data) => {
         return await axios.post(urls.Register, data);
     }
-
     
     const onSubmit = (data) => {
         clearErrors();
@@ -63,7 +58,7 @@ const Register = () => {
             });
     };
     return(
-        <ThemeProvider theme={defaultTheme}>
+        <div>
             <Container component={"main"} maxWidth="xs">
                 <CssBaseline/>
                 <Box
@@ -147,7 +142,7 @@ const Register = () => {
                 </Box>
             </Container>
             <CustomSnackbar {...snackbarStatus}/>
-        </ThemeProvider>
+        </div>
     );
 };
 

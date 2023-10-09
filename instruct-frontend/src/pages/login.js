@@ -21,10 +21,8 @@ import {
 import CustomLink from '../components/CustomLink';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PasswordField from '../components/passwordField';
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const Login = () => {
-    const defaultTheme = createTheme();
     const navigation = useNavigate();
     const { snackbarStatus } = useCustomContext();
     const [cookies, setCookie] = useCookies(['accesstoken', 'refreshtoken']);
@@ -69,7 +67,7 @@ const Login = () => {
             });
     };
     return (
-        <ThemeProvider theme={defaultTheme}>
+        <div>
             <Container component={"main"} maxWidth="xs">
                 <CssBaseline />
                 <Box
@@ -129,7 +127,7 @@ const Login = () => {
                 </Box>
             </Container>
             <CustomSnackbar {...snackbarStatus} />
-        </ThemeProvider>
+        </div>
     );
 };
 
