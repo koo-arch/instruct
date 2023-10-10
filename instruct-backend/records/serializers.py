@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import PatrolPlaces, PatrolRecord, CountUsersProps, CountUsersRecord
 from datetime import date
+from timetable.utils import TimetableManageer
 
 
 class PatrolPlaceSerializer(serializers.ModelSerializer):
@@ -28,28 +29,16 @@ class PatrolRecordSerializer(serializers.ModelSerializer):
     def validate(self, data):
         place = data.get("place")
         
-        # place が存在し、place フィールドが設定されているか確認
-        if place and hasattr(place, 'name'):
-            place_id = place.id
-        else:
-            raise serializers.ValidationError("name フィールドが存在しません。")
-        
-        # is_active フィールドが設定されているか確認
-        if hasattr(place, 'is_active'):
-            is_active = place.is_active
-        else:
-            raise serializers.ValidationError("is_active フィールドが存在しません。")
-        
-        # is_pm_rounds_twice フィールドが設定されているか確認
-        if hasattr(place, 'is_pm_rounds_twice'):
-            is_pm_rounds_twice = place.is_pm_rounds_twice
-        else:
-            raise serializers.ValidationError("is_pm_rounds_twice フィールドが存在しません。")
+        # ネストされたPatrolPlacesのデータの取得
+        place_id = place.id
+        is_active = place.is_active
+        is_pm_rounds_twice = place.is_pm_rounds_twice
         
         # 指定された場所がアクティブであるか
         if not is_active:
-            raise serializers.ValidationError("指定された巡回場所はアクティブではありません。")
+            raise serializers.ValidationError({"detail" : "指定された巡回場所は現在対象ではありません。"})
         
+
         AM_or_PM = data.get("AM_or_PM")
 
         # 送信された場所、日付、午前午後が同じレコードを取得
@@ -61,7 +50,7 @@ class PatrolRecordSerializer(serializers.ModelSerializer):
         # レコードが存在し、さらに巡回が完了している場合にエラーを発生させる
         if record.exists():
             if is_patrol_completed:
-                raise serializers.ValidationError("この場所はすでに記録済みです。")
+                raise serializers.ValidationError({"place": "この場所はすでに記録済みです。"})
         return data
 
 
@@ -91,26 +80,41 @@ class CountUsersRecordSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         props = data.get("props")
-        
-       # props が存在し、seats_num フィールドが設定されているか確認
-        if props and hasattr(props, 'seats_num'):
-            seats_num = props.seats_num
-        else:
-            raise serializers.ValidationError("seats_numフィールドが存在しません。")
-        
-        # is_active フィールドが設定されているか確認
-        if hasattr(props, 'is_active'):
-            is_active = props.is_active
-        else:
-            raise serializers.ValidationError("is_activeフィールドが存在しません。")
+
+        props_id = props.id
+        seats_num = props.seats_num
+        is_active = props.is_active
+        is_count_own_pc = props.is_count_own_pc
         
         # 指定された場所がアクティブであるか
         if not is_active:
-            raise serializers.ValidationError("指定された巡回場所はアクティブではありません。")
+            raise serializers.ValidationError({"detail": "指定された巡回場所は現在対象ではありません。"})
         
         univ_users_num = data.get("univ_users_num", 0)
         own_users_num = data.get("own_users_num", 0)
 
+        if not is_count_own_pc:
+            data["own_users_num"] = 0
+
         if seats_num < univ_users_num + own_users_num:
-            raise serializers.ValidationError("入力席数の合計が利用可能数を超えています。")
+            raise serializers.ValidationError(
+                {"univ_users_num": "入力席数の合計が利用可能数を超えています。", 
+                "own_users_num": "入力席数の合計が利用可能数を超えています。"},
+                )
+        
+        timetable_manager = TimetableManageer()
+        current_school_period = timetable_manager.get_current_school_period()
+        
+        exists_record = CountUsersRecord.objects.filter(
+            props=props_id,
+            school_period=current_school_period,
+            published_date=date.today()
+            ).exists()
+        
+        if exists_record:
+            raise serializers.ValidationError(
+                {"place": "この場所はすでに記録済みです。",
+                "room_type": "この場所はすでに記録済みです。"}
+                 )
+        
         return data

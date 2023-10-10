@@ -1,29 +1,31 @@
 from django.http import QueryDict
-from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
+from rest_framework.exceptions import APIException
 from rest_framework import status
 from django.db.models import Max, Min
 from .models import TimeTable
 from datetime import datetime, time
 
-class SchoolPeriodManager:
+class TimetableManageer:
     def __init__(self):
         self.queryset = TimeTable.objects.all()
   
+
     def get_current_school_period(self):
         queryset = self.queryset
         current_time = datetime.now().time()
 
-        current_timetable = get_object_or_404(
-            queryset,
+        current_timetable = queryset.filter(
             start_time__lte=current_time,
-            end_time__gt=current_time)
+            end_time__gt=current_time
+        ).first()
         
-        if current_timetable:
+        if current_timetable is not None:
             school_period = current_timetable.school_period
             return school_period
         else:
-            return Response({"error": "授業時間外です。"}, status=status.HTTP_400_BAD_REQUEST)
+            raise APIException("授業時間外です。", code=status.HTTP_400_BAD_REQUEST)
+
 
     def judge_AM_or_PM(self):
         queryset = self.queryset
@@ -31,7 +33,6 @@ class SchoolPeriodManager:
 
         min_school_period = queryset.aggregate(min_school_period=Min('school_period'))['min_school_period']
         max_school_period = queryset.aggregate(max_school_period=Max('school_period'))['max_school_period']
-
 
         start_school = queryset.filter(school_period=min_school_period)[0].start_time
         end_school = queryset.filter(school_period=max_school_period)[0].end_time
@@ -42,7 +43,7 @@ class SchoolPeriodManager:
         elif noon <= current_time < end_school:
             AM_or_PM = "午後"
         else:
-            return Response({"error": "授業時間外です。"}, status=status.HTTP_400_BAD_REQUEST)
+            raise APIException("授業時間外です。", code=status.HTTP_400_BAD_REQUEST)
         
         return AM_or_PM
         

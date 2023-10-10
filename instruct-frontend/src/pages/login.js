@@ -4,7 +4,7 @@ import { useCookies } from 'react-cookie';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginSuccess, logoutSuccess } from '../redux/authSlice';
+import { loginSuccess } from '../redux/authSlice';
 import { useCustomContext } from '../components/customContexts';
 import urls from '../api/urls';
 import CustomSnackbar from '../components/customSnackbar';

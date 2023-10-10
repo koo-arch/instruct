@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from instruct.permissons import IsAdminUserOrReadOnly
 from .models import TimeTable
 from .serializers import TimeTableSerializer
-from .utils import SchoolPeriodManager
+from .utils import TimetableManageer
 
 
 
@@ -33,8 +33,8 @@ class CurrentTimeTableView(generics.RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         
-        school_period_manager = SchoolPeriodManager()
-        current_school_period = school_period_manager.get_current_school_period()
+        timetable_manager = TimetableManageer()
+        current_school_period = timetable_manager.get_current_school_period()
         school_period = {"school_period": current_school_period}
         
         return Response(school_period, status=status.HTTP_200_OK)

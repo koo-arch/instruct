@@ -6,7 +6,7 @@ from instruct.permissons import IsAdminUserOrReadOnly, IsAuthenticatedOrReadOnly
 from .models import PatrolPlaces, PatrolRecord, CountUsersProps, CountUsersRecord
 from .serializers import PatrolPlaceSerializer, PatrolRecordSerializer, CountUsersPropsSerializer, CountUsersRecordSerializer
 from .filters import CountUsersRecordFilter
-from timetable.utils import SchoolPeriodManager
+from timetable.utils import TimetableManageer
 
 
 
@@ -47,15 +47,15 @@ class PatrolRecordListView(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         data = request.data
 
-        school_period_manager = SchoolPeriodManager()
+        timetable_manager = TimetableManageer()
 
         # dataにschool_periodフィールドを追加
-        current_school_period = school_period_manager.get_current_school_period()
-        added_school_period_data = school_period_manager.add_data_to_Querydict(data, "school_period", current_school_period)
+        current_school_period = timetable_manager.get_current_school_period()
+        added_school_period_data = timetable_manager.add_data_to_Querydict(data, "school_period", current_school_period)
 
         # AM_or_PMフィールドを追加
-        AM_or_PM = school_period_manager.judge_AM_or_PM() 
-        processed_data = school_period_manager.add_data_to_Querydict(added_school_period_data, "AM_or_PM", AM_or_PM)
+        AM_or_PM = timetable_manager.judge_AM_or_PM() 
+        processed_data = timetable_manager.add_data_to_Querydict(added_school_period_data, "AM_or_PM", AM_or_PM)
 
         serializer = self.get_serializer(data=processed_data)
         if serializer.is_valid():
@@ -71,8 +71,8 @@ class PatrolStatusView(generics.ListAPIView):
     def get_queryset(self):
         now = datetime.now()
 
-        school_period_manager = SchoolPeriodManager()
-        AM_or_PM = school_period_manager.judge_AM_or_PM()
+        timetable_manager = TimetableManageer()
+        AM_or_PM = timetable_manager.judge_AM_or_PM()
 
         # PatrolRecordモデルから条件に合致するレコードを検索
         queryset = PatrolRecord.objects.filter(
@@ -153,9 +153,9 @@ class CountUsersRecordListView(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        school_period_manager = SchoolPeriodManager()
-        current_school_period = school_period_manager.get_current_school_period()
-        processed_data = school_period_manager.add_data_to_Querydict(data, "school_period", current_school_period)
+        timetable_manager = TimetableManageer()
+        current_school_period = timetable_manager.get_current_school_period()
+        processed_data = timetable_manager.add_data_to_Querydict(data, "school_period", current_school_period)
 
         serializer = self.get_serializer(data=processed_data)
         if serializer.is_valid():
@@ -172,8 +172,8 @@ class CountUsersStatusView(generics.ListAPIView):
 
     def get_queryset(self):
         today = datetime.now().date()
-        school_period_manager = SchoolPeriodManager()
-        current_school_period = school_period_manager.get_current_school_period()
+        timetable_manager = TimetableManageer()
+        current_school_period = timetable_manager.get_current_school_period()
 
         queryset = CountUsersRecord.objects.filter(
             published_date=today,
