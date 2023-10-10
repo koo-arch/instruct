@@ -1,15 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import useCurrentTimetable from '../../hooks/useCurrentTimetable';
 import useFetchCountUsersStatus from '../../hooks/useFetchCountUsersStatus';
 import Loading from '../../components/loading';
 import StatusField from '../statusField';
 
 const CountUsersStatus = () => {
-    const currentTimetable = useSelector(state => state.currentTimetable);
     const countUsersStatus = useSelector(state => state.countUsersStatus);
 
-    useCurrentTimetable();
     useFetchCountUsersStatus();
 
     const isLoading = countUsersStatus.isLoading
@@ -28,7 +25,7 @@ const CountUsersStatus = () => {
                     <StatusField
                         rows={countUsersStatus.status}
                         columns={columns}
-                        title="利用人数記録状況"
+                        title="利用人数記録"
                     />
             }
         </div>

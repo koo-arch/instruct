@@ -2,7 +2,7 @@ import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Box, Typography, Container } from '@mui/material';
 
-const patrolStatusField = ({ rows, columns, title }) => {
+const StatusField = ({ rows, columns, title }) => {
 
     if (rows.length === 0) {
         return(
@@ -28,4 +28,4 @@ const patrolStatusField = ({ rows, columns, title }) => {
     )
 }
 
-export default patrolStatusField;
+export default StatusField;

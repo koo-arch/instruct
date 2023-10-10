@@ -22,7 +22,7 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import DoneIcon from '@mui/icons-material/Done';
 import MenuIcon from '@mui/icons-material/Menu';
 
-const drawerWidth = 350;
+const drawerWidth = 300;
 
 const ResponsiveDrawer = ({ children }) => {
     // Reduxから認証情報を取得
@@ -54,7 +54,7 @@ const ResponsiveDrawer = ({ children }) => {
                 }
                 <Divider />
                 {/* 利用人数記録へのリンクを表示するリストアイテム */}
-                <ListItemButton component={Link} to="/records" onClick={handleDrawerToggle}>
+                <ListItemButton component={Link} to="/records/countusers" onClick={handleDrawerToggle}>
                     <ListItemIcon>
                         <FormatListBulletedIcon />
                     </ListItemIcon>

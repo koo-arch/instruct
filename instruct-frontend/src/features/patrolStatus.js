@@ -1,15 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import useCurrentTimetable from '../hooks/useCurrentTimetable';
 import useFetchPatrolStatus from '../hooks/useFetchPatrolStatus';
 import Loading from '../components/loading';
 import StatusField from './statusField';
 
 const PatrolStatus = () => {
-  const currentTimetable = useSelector(state => state.currentTimetable);
   const patrolStatus = useSelector(state => state.patrolStatus);
   
-  useCurrentTimetable();
   useFetchPatrolStatus();
 
   const isLoading = patrolStatus.isLoading
@@ -28,7 +25,7 @@ const PatrolStatus = () => {
           <StatusField
             rows={patrolStatus.status}
             columns={columns}
-            title="巡回時間記録状況"
+            title="巡回時間記録"
           />
       }
     </div>

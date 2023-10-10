@@ -5,8 +5,12 @@ import CustomSnackbar from '../components/customSnackbar';
 import { Container, useMediaQuery, Typography, Grid, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useCustomContext } from '../components/customContexts';
+import AccordionMenu from '../components/accordionManu';
+import RecordStatus from '../features/recordStatus';
+import FetchCountUsersRecords from '../features/countUsersRecord/fetchCountUsersRecords';
 
-const Records = () => {
+
+const CountUsers = () => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
     const { snackbarStatus } = useCustomContext();
     const isMobileSize = useMediaQuery('(max-width: 500px');
@@ -31,11 +35,15 @@ const Records = () => {
                         </Grid>
                     }
                 </Grid>
+                <AccordionMenu section="巡回状況">
+                    <RecordStatus/>
+                </AccordionMenu>
             </Container>
+            <FetchCountUsersRecords/>
             <CreateCountUsersRecord create={openRef}/>
             <CustomSnackbar {...snackbarStatus} />
         </div>
     )
 }
 
-export default Records
+export default CountUsers;

@@ -7,7 +7,7 @@ import Login from './pages/login';
 import Register from './pages/register';
 import ResetPassword from './pages/resetPassword';
 import ResetPasswordConfirm from './pages/resetPasswordConfirm';
-import Records from './pages/records';
+import CountUsers from './pages/countUsers';
 import NotFound from './pages/notFound';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -41,7 +41,7 @@ const App = () => {
               <Route path='/password/reset/confirm/:uid/:token' element={<ResetPasswordConfirm/>} />
 
 
-              <Route path="/records" element={<Records/>}/>
+              <Route path="/records/countusers" element={<CountUsers/>}/>
               <Route path="*" element={<NotFound />}/>
             </Routes>
           </ResponsiveDrawer>
