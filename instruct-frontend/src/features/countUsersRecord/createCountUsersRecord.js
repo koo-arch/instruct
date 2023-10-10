@@ -9,24 +9,26 @@ import AddIcon from '@mui/icons-material/Add';
 import { Fab } from '@mui/material';
 import FormDialog from '../../components/formDialog';
 import useFetchCountUsersProps from '../../hooks/useFetchCountUsersPrpps';
-import CustomSnackbar from '../../components/customSnackbar';
 import '../../styles/styles.css';
+
 
 const CreateCountUsersRecord = (props) => {
     const { create } = props;
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const useFormMethods = useForm();
-    const { register, setValue, getValues, handleSubmit, formState: { errors } } = useFormMethods;
+    const { register, setValue, getValues, handleSubmit, reset, formState: { errors } } = useFormMethods;
     const authAxios = useAuthAxios();
     const { postFlag, setPostFlag, setSnackbarStatus } = useCustomContext();
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
     const fetchCountUsersProps = useFetchCountUsersProps(); // 非同期データの読み込みをトリガー
+
 
     const openDialog = async () => {
         await fetchCountUsersProps(); // データの読み込みが完了するまで待つ
         setDialogIsOpen(true); // データが読み込まれたらダイアログを開く
     };
     const closeDialog = () => setDialogIsOpen(false);
+
 
     const postNewCountUsersRecord = async (data) => {
         return await authAxios.post(urls.CountUsersRecord, data)
@@ -43,6 +45,7 @@ const CreateCountUsersRecord = (props) => {
                 });
                 setPostFlag(!postFlag);
                 closeDialog();
+                reset();
             })
             .catch(err => {
                 setSnackbarStatus({

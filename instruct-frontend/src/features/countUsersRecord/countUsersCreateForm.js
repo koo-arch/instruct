@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import NumberInput from '../../components/numberInput';
@@ -7,7 +7,7 @@ import useDropdownLogic from '../../hooks/useDropdownLogic';
 import { FormControl } from '@mui/material';
 
 const CountUsersForm = () => {
-    const { control, register } = useFormContext();
+    const { control, register, setValue } = useFormContext();
     const countUsersPlaces = useSelector(state => state.countUsersProps.places);
 
     const {
@@ -20,14 +20,19 @@ const CountUsersForm = () => {
     } = useDropdownLogic(countUsersPlaces);
 
 
-    // 選択された場所と部屋タイプに対応するオブジェクトのIDを取得
+    // 選択された場所と部屋タイプに対応するオブジェクトを取得
     const selectedObject = countUsersPlaces.find(
         (item) => 
             item.place === selectedPlace && item.room_type === selectedRoomType
     )
+    
     const selectedId = selectedObject?.id;
     const selectedSeatsNum = selectedObject?.seats_num ?? 0;
     const isCountOwnPC = selectedObject?.is_count_own_pc ?? false;
+
+    useEffect(() => {
+        setValue('props', selectedId);
+    },[selectedId, setValue])
 
 
     return (
@@ -73,8 +78,8 @@ const CountUsersForm = () => {
 
             {selectedId && (
                 <input
-                    type="hidden"
-                    name="selectedId"
+                    type='hidden'
+                    name='props'
                     value={selectedId}
                     {...register('props')}
                 />
