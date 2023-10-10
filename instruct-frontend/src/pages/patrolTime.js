@@ -6,11 +6,10 @@ import AddIcon from '@mui/icons-material/Add';
 import { useCustomContext } from '../components/customContexts';
 import AccordionMenu from '../components/accordionManu';
 import RecordStatus from '../features/status/recordStatus';
-import CreateCountUsersRecord from '../features/countUsersRecord/createCountUsersRecord';
-import FetchCountUsersRecords from '../features/countUsersRecord/fetchCountUsersRecords';
+import CreatePatrolRecord from '../features/patrolRecords/createPatrolRecord';
 
 
-const CountUsers = () => {
+const PatrolTime = () => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
     const { snackbarStatus } = useCustomContext();
     const isMobileSize = useMediaQuery('(max-width: 500px');
@@ -23,7 +22,7 @@ const CountUsers = () => {
                 <Grid container sx={{ mt: 3, mb: 3 }}>
                     <Grid item xs>
                         <Typography component={"h1"} variant="h3">
-                            利用人数記録表
+                            巡回時間記録
                         </Typography>
                     </Grid>
                     {isAuthenticated && !isMobileSize &&
@@ -36,14 +35,13 @@ const CountUsers = () => {
                     }
                 </Grid>
                 <AccordionMenu section="巡回状況">
-                    <RecordStatus/>
+                    <RecordStatus />
                 </AccordionMenu>
             </Container>
-            <FetchCountUsersRecords/>
-            <CreateCountUsersRecord create={openRef}/>
+            <CreatePatrolRecord create={openRef} />
             <CustomSnackbar {...snackbarStatus} />
         </div>
     )
 }
 
-export default CountUsers;
+export default PatrolTime;

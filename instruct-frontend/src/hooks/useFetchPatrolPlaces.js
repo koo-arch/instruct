@@ -9,7 +9,7 @@ const useFetchPatrolPlaces = () => {
 
     const fetchPatrolPlaces = async () => {
         try {
-            res = await axios.get(urls.PatrolPlaces);
+            const res = await axios.get(urls.PatrolPlaces);
             dispatch(patrolPlacesFetchSuccess(res.data));
             return res.data;
         } catch (err) {
