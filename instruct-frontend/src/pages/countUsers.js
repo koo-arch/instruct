@@ -6,7 +6,7 @@ import { Container, useMediaQuery, Typography, Grid, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useCustomContext } from '../components/customContexts';
 import AccordionMenu from '../components/accordionManu';
-import RecordStatus from '../features/recordStatus';
+import RecordStatus from '../features/status/recordStatus';
 import FetchCountUsersRecords from '../features/countUsersRecord/fetchCountUsersRecords';
 
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import useFetchCountUsersStatus from '../../hooks/useFetchCountUsersStatus';
 import Loading from '../../components/loading';
-import StatusField from '../statusField';
+import StatusField from './statusField';
 
 const CountUsersStatus = () => {
     const countUsersStatus = useSelector(state => state.countUsersStatus);
