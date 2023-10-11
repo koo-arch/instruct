@@ -6,6 +6,10 @@ from django.db.models import Max, Min
 from .models import TimeTable
 from datetime import datetime, time
 
+class Timetable400Exception(APIException):
+    status_code = 400
+    default_detail = "授業時間外です。"
+
 class TimetableManageer:
     def __init__(self):
         self.queryset = TimeTable.objects.all()
@@ -24,8 +28,7 @@ class TimetableManageer:
             school_period = current_timetable.school_period
             return school_period
         else:
-            raise APIException("授業時間外です。", code=status.HTTP_400_BAD_REQUEST)
-
+            raise Timetable400Exception()
 
     def judge_AM_or_PM(self):
         queryset = self.queryset
@@ -43,7 +46,7 @@ class TimetableManageer:
         elif noon <= current_time < end_school:
             AM_or_PM = "午後"
         else:
-            raise APIException("授業時間外です。", code=status.HTTP_400_BAD_REQUEST)
+            raise Timetable400Exception()
         
         return AM_or_PM
         

@@ -45,12 +45,11 @@ class PatrolRecordSerializer(serializers.ModelSerializer):
         record = PatrolRecord.objects.filter(place=place_id, published_date=date.today(), AM_or_PM=AM_or_PM)
 
         # 巡回が完了しているか
-        is_patrol_completed = AM_or_PM != "午後" or not is_pm_rounds_twice or len(record) > 1
+        is_pm_twice_completed = AM_or_PM != "午後" or not is_pm_rounds_twice or len(record) > 1
 
         # レコードが存在し、さらに巡回が完了している場合にエラーを発生させる
-        if record.exists():
-            if is_patrol_completed:
-                raise serializers.ValidationError({"place": "この場所はすでに記録済みです。"})
+        if record.exists() and is_pm_twice_completed:
+            raise serializers.ValidationError({"place": "この場所はすでに記録済みです。"})
         return data
 
 
