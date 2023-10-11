@@ -1,5 +1,14 @@
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+import { 
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions, 
+    List,
+    ListItem,
+    ListItemText,
+    Button 
+} from '@mui/material';
 
 const FormDialog = (props) => {
     const { open, onClose, color, title, children, buttonText } = props;
@@ -9,9 +18,17 @@ const FormDialog = (props) => {
             <Dialog
                 open={open}
                 onClose={onClose}
+                sx={{ minWidth: '300px' }}
             >
                 <DialogTitle>{title}</DialogTitle>
                 <DialogContent>
+                    <List>
+                        <ListItem>
+                            <ListItemText sx={{ minWidth: 400 }}>
+
+                            </ListItemText>
+                        </ListItem>
+                    </List>
                     {children}
                 </DialogContent>
                 <DialogActions>

@@ -1,11 +1,26 @@
 import React, { useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import CountUsersDetailDialog from './countUsersRecord/countUsersDetailDialog';
-import { Box, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 
-const TableField = ({ rows, columns, title, url, message = "" }) => {
+const TableField = (props) => {
+    const { 
+        displayComponent: DisplayComponent, 
+        rows, 
+        columns, 
+        title, 
+        url, 
+        message = "", 
+    } = props;
     const [openDetail, setOpenDetail] = useState(false);
     const [selectedRowData, setSelectedRowData] = useState({});
+
+    
+    const defaultSortModel = [
+        {
+            field: 'id',
+            sort: 'desc',
+        },
+    ];
 
     const handleCellClick = (params) => {
         setSelectedRowData(params.row)
@@ -25,22 +40,25 @@ const TableField = ({ rows, columns, title, url, message = "" }) => {
     }
     return(
         <Box width="100%" sx={{ mb: 4 }}>
-            <Typography component={"h2"} variant='h5' sx={{ mb: 1, mt : 2 }}>
-                {title}
-            </Typography>
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                onCellClick={handleCellClick}
-                disableColumnMenu
-                sx={{ mb : 10 }}
-            />
-            <CountUsersDetailDialog 
-                open={openDetail} 
-                onClose={handleClose} 
-                rowData={selectedRowData}
-                url={url}
-            />
+            <Container>
+                <Typography component={"h2"} variant='h5' sx={{ mb: 1, mt : 2 }}>
+                    {title}
+                </Typography>
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    onCellClick={handleCellClick}
+                    disableColumnMenu
+                    sortModel={defaultSortModel}
+                    sx={{ mb : 10 }}
+                />
+                <DisplayComponent
+                    open={openDetail} 
+                    onClose={handleClose} 
+                    rowData={selectedRowData}
+                    url={url}
+                />
+            </Container>
         </Box>
     )
 }

@@ -19,7 +19,8 @@ import {
     Toolbar,
 } from '@mui/material';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import DoneIcon from '@mui/icons-material/Done';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import HomeIcon from '@mui/icons-material/Home';
 import MenuIcon from '@mui/icons-material/Menu';
 
 const drawerWidth = 300;
@@ -53,19 +54,23 @@ const ResponsiveDrawer = ({ children }) => {
                     <Toolbar />
                 }
                 <Divider />
-                {/* 利用人数記録へのリンクを表示するリストアイテム */}
+                <ListItemButton component={Link} to="/" onClick={handleDrawerToggle}>
+                    <ListItemIcon>
+                        <HomeIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="トップページ" />
+                </ListItemButton>
                 <ListItemButton component={Link} to="/records/countusers" onClick={handleDrawerToggle}>
                     <ListItemIcon>
                         <FormatListBulletedIcon />
                     </ListItemIcon>
                     <ListItemText primary="利用人数記録" />
                 </ListItemButton>
-                {/* 完了したタスクへのリンクを表示するリストアイテム */}
-                <ListItemButton component={Link} to="/finished" onClick={handleDrawerToggle}>
+                <ListItemButton component={Link} to="/records/patroltime" onClick={handleDrawerToggle}>
                     <ListItemIcon>
-                        <DoneIcon />
+                        <AccessTimeIcon />
                     </ListItemIcon>
-                    <ListItemText primary="完了したタスク" />
+                    <ListItemText primary="巡回時間記録" />
                 </ListItemButton>
             </List>
         </div>

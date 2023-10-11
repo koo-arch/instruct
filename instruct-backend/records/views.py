@@ -51,11 +51,11 @@ class PatrolRecordListView(generics.ListCreateAPIView):
 
         # dataにschool_periodフィールドを追加
         current_school_period = timetable_manager.get_current_school_period()
-        added_school_period_data = timetable_manager.add_data_to_Querydict(data, "school_period", current_school_period)
+        data = timetable_manager.add_data_to_Querydict(data, "school_period", current_school_period)
 
         # AM_or_PMフィールドを追加
         AM_or_PM = timetable_manager.judge_AM_or_PM() 
-        processed_data = timetable_manager.add_data_to_Querydict(added_school_period_data, "AM_or_PM", AM_or_PM)
+        processed_data = timetable_manager.add_data_to_Querydict(data, "AM_or_PM", AM_or_PM)
 
         serializer = self.get_serializer(data=processed_data)
         if serializer.is_valid():
@@ -67,13 +67,12 @@ class PatrolRecordListView(generics.ListCreateAPIView):
 class PatrolStatusView(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = PatrolRecordSerializer
+    timetable_manager = TimetableManageer()
+    AM_or_PM = timetable_manager.judge_AM_or_PM()
 
     def get_queryset(self):
         now = datetime.now()
-
-        timetable_manager = TimetableManageer()
-        AM_or_PM = timetable_manager.judge_AM_or_PM()
-
+        AM_or_PM = self.AM_or_PM
         # PatrolRecordモデルから条件に合致するレコードを検索
         queryset = PatrolRecord.objects.filter(
             published_date=now.date(),
@@ -84,19 +83,23 @@ class PatrolStatusView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
+        current_AM_or_PM = self.AM_or_PM
+        current_patrol_record = self.timetable_manager.get_current_school_period()
         patrol_status = []
         places = PatrolPlaces.objects.filter(is_active=True)
 
         for place in places:
             # 条件に合致するレコードが存在する場合はTrue、存在しない場合はFalseを格納
             search_records = queryset.filter(place=place)
+            is_completed = search_records.exists()
+            
+            is_need_twice = is_completed and current_AM_or_PM == "午後" and place.is_pm_rounds_twice
 
             # ２回目の巡回がある場合、レコードが2つ以上でTrue
-            if place.is_pm_rounds_twice:
-                # 登録した時限中はTrueになる様にしたいが、１回目だと問答無用でfalseになる
-                is_completed = len(search_records) > 1
-            else:
-                is_completed = search_records.exists()
+            if is_need_twice:
+                school_period = search_records[0].school_period
+                is_completed = len(search_records) > 1 or current_patrol_record <= school_period
+                                                                # 登録した時限中はTrueにする
                 
             patrol_status.append({
                 "id": place.pk,

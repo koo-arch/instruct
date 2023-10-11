@@ -6,6 +6,10 @@ from django.db.models import Max, Min
 from .models import TimeTable
 from datetime import datetime, time
 
+class Timetable400Exception(APIException):
+    status_code = 400
+    default_detail = "授業時間外です。"
+
 class TimetableManageer:
     def __init__(self):
         self.queryset = TimeTable.objects.all()
@@ -24,8 +28,7 @@ class TimetableManageer:
             school_period = current_timetable.school_period
             return school_period
         else:
-            raise APIException("授業時間外です。", code=status.HTTP_400_BAD_REQUEST)
-
+            raise Timetable400Exception()
 
     def judge_AM_or_PM(self):
         queryset = self.queryset
@@ -43,12 +46,12 @@ class TimetableManageer:
         elif noon <= current_time < end_school:
             AM_or_PM = "午後"
         else:
-            raise APIException("授業時間外です。", code=status.HTTP_400_BAD_REQUEST)
+            raise Timetable400Exception()
         
         return AM_or_PM
         
     def add_data_to_Querydict(self, data, key, value):
-        processed_data = dict(data)  # QueryDictを辞書に変換
+        processed_data = QueryDict.dict(data)  # QueryDictを辞書に変換
         processed_data[key] = value
         processed_querydict = QueryDict('', mutable=True)
         processed_querydict.update(processed_data)  # 辞書をQueryDictに変換

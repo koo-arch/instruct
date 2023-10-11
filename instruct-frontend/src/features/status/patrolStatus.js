@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import useFetchPatrolStatus from '../hooks/useFetchPatrolStatus';
-import Loading from '../components/loading';
+import useFetchPatrolStatus from '../../hooks/useFetchPatrolStatus';
+import Loading from '../../components/loading';
 import StatusField from './statusField';
 
 const PatrolStatus = () => {

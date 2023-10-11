@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import useCurrentTimetable from '../hooks/useCurrentTimetable';
-import Loading from '../components/loading';
-import PatrolStatus from '../features/patrolStatus';
-import CountUsersStatus from '../features/countUsersRecord/countUsersStatus';
+import useCurrentTimetable from '../../hooks/useCurrentTimetable';
+import Loading from '../../components/loading';
+import PatrolStatus from './patrolStatus';
+import CountUsersStatus from './countUsersStatus';
 import { Typography} from '@mui/material';
 
 const RecordStatus = () => {

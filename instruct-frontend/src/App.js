@@ -8,6 +8,7 @@ import Register from './pages/register';
 import ResetPassword from './pages/resetPassword';
 import ResetPasswordConfirm from './pages/resetPasswordConfirm';
 import CountUsers from './pages/countUsers';
+import PatrolTime from './pages/patrolTime';
 import NotFound from './pages/notFound';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -42,6 +43,7 @@ const App = () => {
 
 
               <Route path="/records/countusers" element={<CountUsers/>}/>
+              <Route path="/records/patroltime" element={<PatrolTime/>}/>
               <Route path="*" element={<NotFound />}/>
             </Routes>
           </ResponsiveDrawer>

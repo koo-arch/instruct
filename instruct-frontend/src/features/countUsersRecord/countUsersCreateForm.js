@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import NumberInput from '../../components/numberInput';
+import NumberInput from './numberInput';
 import DropdownSelect from '../../components/dropdownSelect';
 import useDropdownLogic from '../../hooks/useDropdownLogic';
 import { FormControl } from '@mui/material';
 
-const CountUsersForm = () => {
+const CountUsersCreateForm = () => {
     const { control, register, setValue } = useFormContext();
     const countUsersPlaces = useSelector(state => state.countUsersProps.places);
 
@@ -120,4 +120,4 @@ const CountUsersForm = () => {
     );
 }
 
-export default CountUsersForm;
+export default CountUsersCreateForm;
