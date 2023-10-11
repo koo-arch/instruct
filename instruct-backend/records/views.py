@@ -51,11 +51,11 @@ class PatrolRecordListView(generics.ListCreateAPIView):
 
         # dataにschool_periodフィールドを追加
         current_school_period = timetable_manager.get_current_school_period()
-        added_school_period_data = timetable_manager.add_data_to_Querydict(data, "school_period", current_school_period)
+        data = timetable_manager.add_data_to_Querydict(data, "school_period", current_school_period)
 
         # AM_or_PMフィールドを追加
         AM_or_PM = timetable_manager.judge_AM_or_PM() 
-        processed_data = timetable_manager.add_data_to_Querydict(added_school_period_data, "AM_or_PM", AM_or_PM)
+        processed_data = timetable_manager.add_data_to_Querydict(data, "AM_or_PM", AM_or_PM)
 
         serializer = self.get_serializer(data=processed_data)
         if serializer.is_valid():

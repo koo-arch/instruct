@@ -6,7 +6,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { useCustomContext } from '../components/customContexts';
 import AccordionMenu from '../components/accordionManu';
 import RecordStatus from '../features/status/recordStatus';
-import CreatePatrolRecord from '../features/patrolRecords/createPatrolRecord';
+import CreatePatrolRecord from '../features/patrolTime/createPatrolRecord';
+import FetchPatrolRecords from '../features/patrolTime/fetchPatrolRecords';
 
 
 const PatrolTime = () => {
@@ -38,6 +39,7 @@ const PatrolTime = () => {
                     <RecordStatus />
                 </AccordionMenu>
             </Container>
+            <FetchPatrolRecords/>
             <CreatePatrolRecord create={openRef} />
             <CustomSnackbar {...snackbarStatus} />
         </div>

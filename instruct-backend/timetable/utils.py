@@ -48,7 +48,7 @@ class TimetableManageer:
         return AM_or_PM
         
     def add_data_to_Querydict(self, data, key, value):
-        processed_data = dict(data)  # QueryDictを辞書に変換
+        processed_data = QueryDict.dict(data)  # QueryDictを辞書に変換
         processed_data[key] = value
         processed_querydict = QueryDict('', mutable=True)
         processed_querydict.update(processed_data)  # 辞書をQueryDictに変換

@@ -2,24 +2,23 @@ import React from 'react';
 import { useMediaQuery } from '@mui/material';
 import TableField from '../tableField';
 import urls from '../../api/urls';
-import CountUsersDetailDialog from './countUsersDetailDialog';
+import PatrolDetailDialog from './patrolDetailDialog';
 
 
-const CountUsersRecords = ({record}) => {
+const PatrolRecord = ({ record }) => {
     const isDesktopSize = useMediaQuery((theme) => theme.breakpoints.up('md'));
     const isMobileSize = useMediaQuery('(max-width: 500px');
 
     const moblieColumns = [
         // 900px未満の列項目
         { field: 'id', headerName: 'ID', flex: 1 },
-        { field: 'published_date', headerName: '日付', flex: 4 },
-        { field: 'school_period', headerName: '時限', flex: 4 },
-        { field: 'location', headerName: '場所', flex: 6 },
+        { field: 'published_date', headerName: '日付', flex: 3 },
+        { field: 'name', headerName: '場所', flex: 3 },
+        { field: 'published_time', headerName: '時間', flex: 3 },
     ]
 
     const ExColumns = isDesktopSize ? [
-        { field: 'univ_users_num', headerName: '大学PC数', flex: 2 },
-        { field: 'own_users_num', headerName: '個人PC数', flex: 2 },
+        { field: 'AM_or_PM', headerName: '時間帯', flex: 3 },
     ] : []
 
     const columns = [...moblieColumns, ...ExColumns]
@@ -27,15 +26,14 @@ const CountUsersRecords = ({record}) => {
     return (
         <div>
             <TableField
-                displayComponent={CountUsersDetailDialog}
+                displayComponent={PatrolDetailDialog}
                 rows={record}
                 columns={columns}
-                url={urls.CountUsersRecord}
+                url={urls.PatrolRecord}
                 title="記録データ"
-                
             />
         </div>
     )
 }
 
-export default CountUsersRecords;
+export default PatrolRecord;
