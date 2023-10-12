@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useCustomContext } from '../../components/customContexts';
 import useAuthAxios from '../../hooks/useAuthAxios';
 import urls from '../../api/urls';
-import CountUsersCreateForm from './countUsersCreateForm';
-import AddIcon from '@mui/icons-material/Add';
-import { Fab } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton, DialogContentText } from '@mui/material';
 import FormDialog from '../../components/formDialog';
 import useFetchCountUsersProps from '../../hooks/useFetchCountUsersPrpps';
 import { errorMessage } from '../../utils/errorMessage';
 import '../../styles/styles.css';
 
 
-const CreateCountUsersRecord = (props) => {
-    const { create } = props;
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+const DeleteCountUsersRecord = (props) => {
+    const {
+        id,
+        iconSize,
+        size
+    } = props;
     const useFormMethods = useForm();
-    const { setError, handleSubmit, reset } = useFormMethods;
+    const { handleSubmit, reset, setError } = useFormMethods;
     const authAxios = useAuthAxios();
     const { postFlag, setPostFlag, setSnackbarStatus } = useCustomContext();
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
@@ -31,18 +32,19 @@ const CreateCountUsersRecord = (props) => {
     const closeDialog = () => setDialogIsOpen(false);
 
 
-    const postNewCountUsersRecord = async (data) => {
-        return await authAxios.post(urls.CountUsersRecord, data)
+    const patchCountUsersRecord = async (data) => {
+        return await authAxios.delete(urls.CountUsersRecord + `${id}/`, data)
     }
+
 
     const onSubmit = (data) => {
         console.log(data)
-        postNewCountUsersRecord(data)
+        patchCountUsersRecord(data)
             .then(res => {
                 setSnackbarStatus({
                     open: true,
                     severity: "success",
-                    message: "利用人数記録が完了しました。"
+                    message: "利用人数記録削除が完了しました。"
                 });
                 setPostFlag(!postFlag);
                 closeDialog();
@@ -50,33 +52,30 @@ const CreateCountUsersRecord = (props) => {
             })
             .catch(err => {
                 const errRes = err.response.data
-                const message = "利用人数記録に失敗しました。"
+                const message = "利用人数記録削除に失敗しました。"
                 errorMessage(errRes, setError, setSnackbarStatus, message);
             })
     }
     return (
         <div>
-            {isAuthenticated && 
-            <div className='fab-container'>
-                <Fab color="primary" onClick={openDialog} ref={create}>
-                    <AddIcon fontSize='large' />
-                </Fab>
-            </div>
-            }
+            <IconButton color="error" size={size} onClick={openDialog}>
+                <DeleteIcon sx={iconSize} />
+            </IconButton>
             <FormDialog
                 open={dialogIsOpen}
                 onClose={closeDialog}
-                title="利用人数登録"
-                buttonText="登録"
+                title="利用人数削除"
+                buttonText="削除"
+                color="error"
             >
-                <FormProvider {...useFormMethods}>
-                    <form id="dialog-form" onSubmit={handleSubmit(onSubmit)}>
-                        <CountUsersCreateForm />
-                    </form>
-                </FormProvider>
+                <form id="dialog-form" onSubmit={handleSubmit(onSubmit)}>
+                    <DialogContentText color="error">
+                        この項目を削除してよろしいですか？
+                    </DialogContentText>
+                </form>
             </FormDialog>
         </div>
     )
 }
 
-export default CreateCountUsersRecord;
+export default DeleteCountUsersRecord;

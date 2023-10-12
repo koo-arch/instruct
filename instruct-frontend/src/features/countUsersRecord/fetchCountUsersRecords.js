@@ -8,6 +8,8 @@ import CountUsersRecords from './countUsersRecords';
 
 const initialState = [{
     id: 0,
+    place: "",
+    room_type: "",
     location: "",
     published_date: "",
     published_time: "",
@@ -19,9 +21,13 @@ const initialState = [{
 
 const formatData = (data) => {
     return data.map(item => {
-        const location = `${item.props.place || ""} - ${item.props.room_type || ""}`;
+        const place = item.props.place || ""
+        const room_type = item.props.room_type || ""
+        const location = `${place} - ${room_type}`;
         return {
             id: item.id || 0,
+            place: place,
+            room_type: room_type,
             location: location,
             published_date: item.published_date || "",
             published_time: item.published_time || "",

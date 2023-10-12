@@ -18,9 +18,14 @@ const CustomSnackbar = (props) => {
     };
 
     return(
-        <Snackbar open={open} autoHideDuration={900} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+        <Snackbar open={open} autoHideDuration={10000} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
             <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
-                {message}
+                {message.split('\n').map((line, index) => (
+                    <span key={index}>
+                        {line}
+                        <br />
+                    </span>
+                ))}
             </Alert>
         </Snackbar>
     )

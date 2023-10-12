@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
 const NumberInput = (props) => {
-    const { value, onChange, name, label, max } = props;
+    const { value, onChange, name, label, max, error, helperText } = props;
 
     const handleIncrement = () => {
         if (value < max || max === undefined) {
@@ -47,6 +47,8 @@ const NumberInput = (props) => {
                     style: { textAlign: 'center' },
                 }}
                 onChange={handleInputChange}
+                error={error}
+                helperText={helperText}
                 style={{ flex: 1 }}
             />
             <IconButton

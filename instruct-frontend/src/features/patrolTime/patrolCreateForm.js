@@ -6,7 +6,7 @@ import { FormControl } from '@mui/material';
 
 const CountUsersCreateForm = () => {
     const [selectedPlace, setSelectedPlace] = useState('');
-    const { control, register, setValue } = useFormContext();
+    const { control, register, setValue, formState: { errors } } = useFormContext();
     const patrolPlaces = useSelector(state => state.patrolPlaces.places);
 
 
@@ -45,6 +45,8 @@ const CountUsersCreateForm = () => {
                                 field.onChange(e);
                                 handleChange(e);
                             }}
+                            error={!!errors.name}
+                            helperText={errors.name?.message}
                             options={places}
                         />
                     )}

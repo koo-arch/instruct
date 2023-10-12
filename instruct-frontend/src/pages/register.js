@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import CustomLink from "../components/CustomLink";
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
+import { errorMessage} from "../utils/errorMessage";
 
 const Register = () => {
     const navigation = useNavigate();
@@ -42,19 +43,9 @@ const Register = () => {
             })
             .catch(err => {
                 const errRes = err.response.data
-                console.log(errRes);
-                // 各項目にエラーをセット
-                Object.keys(errRes).map((key) => {
-                    const messages = errRes[`${key}`]
-                    const newMessages = [];
-
-                    // メッセージ内のスペースを削除
-                    for (let i = 0; i < messages.length; i++) {
-                        newMessages[i] = messages[i].replace(/ /g, "")
-                    }
-                    setError(`${key}`, { type: "validate", message: newMessages})
-                    return setError;
-                })
+                console.log(err);
+                const defaultMessage = "アカウント登録に失敗しました。"
+                errorMessage(errRes, setError, setSnackbarStatus, defaultMessage);
             });
     };
     return(

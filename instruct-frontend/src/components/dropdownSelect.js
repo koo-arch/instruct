@@ -1,7 +1,8 @@
 import React from 'react';
 import { MenuItem, TextField } from '@mui/material';
 
-const DropdownSelect = ({ label, value, onChange, options }) => {
+const DropdownSelect = (props) => {
+    const { label, value, onChange, options, error, helperText } = props;
     return (
         <TextField
             select
@@ -9,6 +10,8 @@ const DropdownSelect = ({ label, value, onChange, options }) => {
             label={label}
             value={value}
             onChange={onChange}
+            error={error}
+            helperText={helperText}
             margin='normal'
         >
             <MenuItem value="">選択してください</MenuItem>

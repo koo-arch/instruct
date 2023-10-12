@@ -1,17 +1,19 @@
 import React from 'react';
 import { 
+    useMediaQuery,
+    useTheme,
     Dialog,
     DialogTitle,
     DialogContent,
     DialogActions, 
-    List,
-    ListItem,
-    ListItemText,
-    Button 
+    Button,
+    Box 
 } from '@mui/material';
 
 const FormDialog = (props) => {
     const { open, onClose, color, title, children, buttonText } = props;
+    const theme = useTheme();
+    const isMobileSize = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
         <div>
@@ -22,13 +24,8 @@ const FormDialog = (props) => {
             >
                 <DialogTitle>{title}</DialogTitle>
                 <DialogContent>
-                    <List>
-                        <ListItem>
-                            <ListItemText sx={{ minWidth: 400 }}>
-
-                            </ListItemText>
-                        </ListItem>
-                    </List>
+                    <Box sx={{ ...(isMobileSize ? {} : { minWidth: 400 }), }}>
+                    </Box>
                     {children}
                 </DialogContent>
                 <DialogActions>
