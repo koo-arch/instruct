@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import useFetchCountUsersStatus from '../../hooks/useFetchCountUsersStatus';
 import Loading from '../../components/loading';
 import StatusField from './statusField';
+import isCompletedField from './isCompletedField';
 
 const CountUsersStatus = () => {
     const countUsersStatus = useSelector(state => state.countUsersStatus);
@@ -13,7 +14,7 @@ const CountUsersStatus = () => {
 
     const columns = [
         { field: 'place', headerName: '巡回場所', sortable: false, flex: 1 },
-        { field: 'is_completed', headerName: '状況', sortable: false, flex: 1 },
+        {...isCompletedField}
     ]
 
     return (
