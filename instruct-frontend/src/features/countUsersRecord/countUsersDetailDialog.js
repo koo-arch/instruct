@@ -1,4 +1,5 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useCustomContext } from '../../components/customContexts';
 import { 
     Dialog, 
@@ -9,11 +10,15 @@ import {
     ListItem, 
     ListItemText,
     Button,
-    Grid
+    Grid,
  } from '@mui/material';
+import UpdateCountUsersRecord from './updateCountUsersReocrd';
+import DeleteCountUsersRecord from './deleteCountUsersRecord';
+
 
 const CountUsersDetailDialog = (props) => {
     const { url, open, onClose, rowData } = props;
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const { postFlag } = useCustomContext();
     const iconSize = {
         width: 30,
@@ -73,26 +78,24 @@ const CountUsersDetailDialog = (props) => {
                     </List>
                 </DialogContent>
                 <Grid container justifyContent='space-evenly'>
-                    {/* { false &&
+                    { isAuthenticated &&
                         <>
                             <Grid item>
-                                <UpdateTask 
-                                    url={url}
+                                <UpdateCountUsersRecord
                                     iconSize={iconSize}
                                     size="large"
                                     {...rowData}
                                 />
                             </Grid>
                             <Grid item>
-                                <DeleteTask 
-                                    url={url}
+                                <DeleteCountUsersRecord 
                                     iconSize={iconSize}
                                     size="large"
                                     {...rowData}
                                 />
                             </Grid>
                         </>
-                    } */}
+                    }
                 </Grid>
                 <DialogActions>
                     <Button variant="contained" onClick={onClose}>閉じる</Button>

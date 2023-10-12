@@ -68,11 +68,10 @@ class PatrolStatusView(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = PatrolRecordSerializer
     timetable_manager = TimetableManageer()
-    AM_or_PM = timetable_manager.judge_AM_or_PM()
 
     def get_queryset(self):
         now = datetime.now()
-        AM_or_PM = self.AM_or_PM
+        AM_or_PM = self.timetable_manager.judge_AM_or_PM()
         # PatrolRecordモデルから条件に合致するレコードを検索
         queryset = PatrolRecord.objects.filter(
             published_date=now.date(),
@@ -83,7 +82,7 @@ class PatrolStatusView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        current_AM_or_PM = self.AM_or_PM
+        current_AM_or_PM = self.timetable_manager.judge_AM_or_PM()
         current_patrol_record = self.timetable_manager.get_current_school_period()
         patrol_status = []
         places = PatrolPlaces.objects.filter(is_active=True)

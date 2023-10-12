@@ -1,7 +1,5 @@
 from django.http import QueryDict
-from rest_framework.response import Response
 from rest_framework.exceptions import APIException
-from rest_framework import status
 from django.db.models import Max, Min
 from .models import TimeTable
 from datetime import datetime, time

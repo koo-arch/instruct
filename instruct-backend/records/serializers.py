@@ -40,16 +40,18 @@ class PatrolRecordSerializer(serializers.ModelSerializer):
         
 
         AM_or_PM = data.get("AM_or_PM")
+        
+        request_method = self.context['request'].method
+        if request_method not in ['PUT', 'PATCH']:
+            # 送信された場所、日付、午前午後が同じレコードを取得
+            record = PatrolRecord.objects.filter(place=place_id, published_date=date.today(), AM_or_PM=AM_or_PM)
 
-        # 送信された場所、日付、午前午後が同じレコードを取得
-        record = PatrolRecord.objects.filter(place=place_id, published_date=date.today(), AM_or_PM=AM_or_PM)
+            # 巡回が完了しているか
+            is_pm_twice_completed = AM_or_PM != "午後" or not is_pm_rounds_twice or len(record) > 1
 
-        # 巡回が完了しているか
-        is_pm_twice_completed = AM_or_PM != "午後" or not is_pm_rounds_twice or len(record) > 1
-
-        # レコードが存在し、さらに巡回が完了している場合にエラーを発生させる
-        if record.exists() and is_pm_twice_completed:
-            raise serializers.ValidationError({"place": "この場所はすでに記録済みです。"})
+            # レコードが存在し、さらに巡回が完了している場合にエラーを発生させる
+            if record.exists() and is_pm_twice_completed:
+                raise serializers.ValidationError({"place": "この場所はすでに記録済みです。"})
         return data
 
 
@@ -101,19 +103,21 @@ class CountUsersRecordSerializer(serializers.ModelSerializer):
                 "own_users_num": "入力席数の合計が利用可能数を超えています。"},
                 )
         
-        timetable_manager = TimetableManageer()
-        current_school_period = timetable_manager.get_current_school_period()
-        
-        exists_record = CountUsersRecord.objects.filter(
-            props=props_id,
-            school_period=current_school_period,
-            published_date=date.today()
-            ).exists()
-        
-        if exists_record:
-            raise serializers.ValidationError(
-                {"place": "この場所はすでに記録済みです。",
-                "room_type": "この場所はすでに記録済みです。"}
-                 )
+        request_method = self.context['request'].method
+        if request_method not in ['PUT', 'PATCH']:
+            timetable_manager = TimetableManageer()
+            current_school_period = timetable_manager.get_current_school_period()
+            
+            exists_record = CountUsersRecord.objects.filter(
+                props=props_id,
+                school_period=current_school_period,
+                published_date=date.today()
+                ).exists()
+            
+            if exists_record:
+                raise serializers.ValidationError(
+                    {"place": "この場所はすでに記録済みです。",
+                    "room_type": "この場所はすでに記録済みです。"}
+                    )
         
         return data

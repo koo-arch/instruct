@@ -4,10 +4,8 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions, 
-    List,
-    ListItem,
-    ListItemText,
-    Button 
+    Button,
+    Box 
 } from '@mui/material';
 
 const FormDialog = (props) => {
@@ -22,13 +20,8 @@ const FormDialog = (props) => {
             >
                 <DialogTitle>{title}</DialogTitle>
                 <DialogContent>
-                    <List>
-                        <ListItem>
-                            <ListItemText sx={{ minWidth: 400 }}>
-
-                            </ListItemText>
-                        </ListItem>
-                    </List>
+                    <Box sx={{minWidth: 400}}>
+                    </Box>
                     {children}
                 </DialogContent>
                 <DialogActions>
