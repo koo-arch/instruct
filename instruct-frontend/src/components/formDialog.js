@@ -1,5 +1,7 @@
 import React from 'react';
 import { 
+    useMediaQuery,
+    useTheme,
     Dialog,
     DialogTitle,
     DialogContent,
@@ -10,6 +12,8 @@ import {
 
 const FormDialog = (props) => {
     const { open, onClose, color, title, children, buttonText } = props;
+    const theme = useTheme();
+    const isMobileSize = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
         <div>
@@ -20,7 +24,7 @@ const FormDialog = (props) => {
             >
                 <DialogTitle>{title}</DialogTitle>
                 <DialogContent>
-                    <Box sx={{minWidth: 400}}>
+                    <Box sx={{ ...(isMobileSize ? {} : { minWidth: 400 }), }}>
                     </Box>
                     {children}
                 </DialogContent>

@@ -51,7 +51,7 @@ class PatrolRecordSerializer(serializers.ModelSerializer):
 
             # レコードが存在し、さらに巡回が完了している場合にエラーを発生させる
             if record.exists() and is_pm_twice_completed:
-                raise serializers.ValidationError({"place": "この場所はすでに記録済みです。"})
+                raise serializers.ValidationError({"name": "この場所はすでに記録済みです。"})
         return data
 
 

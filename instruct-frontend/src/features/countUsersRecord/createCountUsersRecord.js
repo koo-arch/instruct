@@ -9,6 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Fab } from '@mui/material';
 import FormDialog from '../../components/formDialog';
 import useFetchCountUsersProps from '../../hooks/useFetchCountUsersPrpps';
+import { errorMessage } from '../../utils/errorMessage';
 import '../../styles/styles.css';
 
 
@@ -16,7 +17,7 @@ const CreateCountUsersRecord = (props) => {
     const { create } = props;
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const useFormMethods = useForm();
-    const { register, setValue, getValues, handleSubmit, reset, formState: { errors } } = useFormMethods;
+    const { setError, handleSubmit, reset } = useFormMethods;
     const authAxios = useAuthAxios();
     const { postFlag, setPostFlag, setSnackbarStatus } = useCustomContext();
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
@@ -48,11 +49,9 @@ const CreateCountUsersRecord = (props) => {
                 reset();
             })
             .catch(err => {
-                setSnackbarStatus({
-                    open: true,
-                    severity: "error",
-                    message: `利用人数記録に失敗しました。(code:${err.response.status})`,
-                });
+                const errRes = err.response.data
+                const message = "利用人数記録に失敗しました。"
+                errorMessage(errRes, setError, setSnackbarStatus, message);
             })
     }
     return (

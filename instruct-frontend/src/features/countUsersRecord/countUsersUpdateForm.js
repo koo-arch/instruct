@@ -10,7 +10,7 @@ const CountUsersUpdateForm = (props) => {
         univ_users_num,
         own_users_num,
     } = props;
-    const { control, register, setValue } = useFormContext();
+    const { control, setValue, formState: { errors } } = useFormContext();
     const countUsersPlaces = useSelector(state => state.countUsersProps.places);
 
 
@@ -45,6 +45,8 @@ const CountUsersUpdateForm = (props) => {
                         onChange={onChange}
                         label="大学PC利用者数"
                         max={selectedSeatsNum}
+                        error={!!errors.univ_users_num}
+                        helperText={errors.univ_users_num?.message}
                     />
                 )}
             />
@@ -59,6 +61,8 @@ const CountUsersUpdateForm = (props) => {
                             onChange={onChange}
                             label="私物PC利用者数"
                             max={selectedSeatsNum}
+                            error={!!errors.own_users_num}
+                            helperText={errors.own_users_num?.message}
                         />
                     )}
                 />

@@ -21,10 +21,11 @@ import {
 import CustomLink from '../components/CustomLink';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PasswordField from '../components/passwordField';
+import { loginErrorMessage } from '../utils/errorMessage';
 
 const Login = () => {
     const navigation = useNavigate();
-    const { snackbarStatus } = useCustomContext();
+    const { snackbarStatus, setSnackbarStatus } = useCustomContext();
     const [cookies, setCookie] = useCookies(['accesstoken', 'refreshtoken']);
     const { register, handleSubmit, clearErrors, setError, formState: { errors } } = useForm();
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -34,7 +35,7 @@ const Login = () => {
         return await axios.post(urls.Login, data);
     }
 
-
+    console.log(errors)
     const getJwt = (data) => {
         clearErrors();
         postLogin(data)
@@ -47,23 +48,8 @@ const Login = () => {
             .catch(err => {
                 const errRes = err.response.data
                 console.log(err.response.status)
-                if (errRes.detail === undefined) {
-                    // 各項目にエラーをセット
-                    Object.keys(errRes).map((key) => {
-                        const messages = errRes[`${key}`]
-                        const newMessages = [];
-
-                        // メッセージ内のスペースを削除
-                        for (let i = 0; i < messages.length; i++) {
-                            newMessages[i] = messages[i].replace(/ /g, "")
-                        }
-                        setError(`${key}`, { type: "validate", message: newMessages })
-                        return setError;
-                    })
-                } else {
-                    setError('email', { type: "validate", message: "メールアドレスかパスワードが違います" })
-                    setError('password', { type: "validate", message: "メールアドレスかパスワードが違います" })
-                }
+                const defaultMessage = "ログインに失敗しました。"
+                loginErrorMessage(errRes, setError, setSnackbarStatus, defaultMessage);
             });
     };
     return (

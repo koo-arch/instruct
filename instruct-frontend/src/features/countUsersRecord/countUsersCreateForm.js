@@ -7,7 +7,7 @@ import useDropdownLogic from '../../hooks/useDropdownLogic';
 import { FormControl } from '@mui/material';
 
 const CountUsersCreateForm = () => {
-    const { control, register, setValue } = useFormContext();
+    const { control, register, setValue, formState: { errors} } = useFormContext();
     const countUsersPlaces = useSelector(state => state.countUsersProps.places);
 
     const {
@@ -50,6 +50,8 @@ const CountUsersCreateForm = () => {
                                 field.onChange(e);
                                 handlePlaceChange(e);
                             }}
+                            error={!!errors.place}
+                            helperText={errors.place?.message}
                             options={places}
                         />
                     )}
@@ -69,6 +71,8 @@ const CountUsersCreateForm = () => {
                                 field.onChange(e);
                                 handleRoomTypeChange(e);
                             }}
+                            error={!!errors.room_type}
+                            helperText={errors.room_type?.message}
                             options={roomTypesForSelectedPlace}
                         />
                     )}
@@ -98,6 +102,8 @@ const CountUsersCreateForm = () => {
                         onChange={onChange}
                         label="大学PC利用者数"
                         max={selectedSeatsNum}
+                        error={!!errors.univ_users_num}
+                        helperText={errors.univ_users_num?.message}
                     />
                 )}
             />
@@ -112,6 +118,8 @@ const CountUsersCreateForm = () => {
                         onChange={onChange}
                         label="私物PC利用者数"
                         max={selectedSeatsNum}
+                        error={!!errors.own_users_num}
+                        helperText={errors.own_users_num?.message}
                     />
                 )}
             />

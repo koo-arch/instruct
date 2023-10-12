@@ -7,6 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton, DialogContentText } from '@mui/material';
 import FormDialog from '../../components/formDialog';
 import useFetchCountUsersProps from '../../hooks/useFetchCountUsersPrpps';
+import { errorMessage } from '../../utils/errorMessage';
 import '../../styles/styles.css';
 
 
@@ -17,7 +18,7 @@ const DeleteCountUsersRecord = (props) => {
         size
     } = props;
     const useFormMethods = useForm();
-    const { register, setValue, getValues, handleSubmit, reset, formState: { errors } } = useFormMethods;
+    const { handleSubmit, reset, setError } = useFormMethods;
     const authAxios = useAuthAxios();
     const { postFlag, setPostFlag, setSnackbarStatus } = useCustomContext();
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
@@ -32,7 +33,7 @@ const DeleteCountUsersRecord = (props) => {
 
 
     const patchCountUsersRecord = async (data) => {
-        return await authAxios.patch(urls.CountUsersRecord + `${id}/`, data)
+        return await authAxios.delete(urls.CountUsersRecord + `${id}/`, data)
     }
 
 
@@ -50,11 +51,9 @@ const DeleteCountUsersRecord = (props) => {
                 reset();
             })
             .catch(err => {
-                setSnackbarStatus({
-                    open: true,
-                    severity: "error",
-                    message: `利用人数記録削除に失敗しました。(code:${err.response.status})`,
-                });
+                const errRes = err.response.data
+                const message = "利用人数記録削除に失敗しました。"
+                errorMessage(errRes, setError, setSnackbarStatus, message);
             })
     }
     return (
