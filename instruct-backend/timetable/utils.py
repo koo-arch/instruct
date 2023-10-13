@@ -7,6 +7,9 @@ from datetime import datetime, time
 class Timetable400Exception(APIException):
     status_code = 400
     default_detail = "授業時間外です。"
+    
+    def __str__(self):
+        return str(self.default_detail)
 
 class TimetableManageer:
     def __init__(self):

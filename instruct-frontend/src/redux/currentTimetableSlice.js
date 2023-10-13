@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     isLoading: true,
-    period: 0,
+    period: [],
     error: null,
 };
 
@@ -17,7 +17,7 @@ const currentTimetableSlice = createSlice({
         },
         currentTimetableFetchFailure: (state, action) => {
             state.isLoading = false;
-            state.period = 0;
+            state.period = [];
             state.error = action.payload;
         },
     },
