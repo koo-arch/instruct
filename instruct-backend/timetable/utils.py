@@ -3,6 +3,7 @@ from rest_framework.exceptions import APIException
 from django.db.models import Max, Min
 from .models import TimeTable
 from datetime import datetime, time
+from django.db import transaction
 
 class Timetable400Exception(APIException):
     status_code = 400
@@ -58,3 +59,17 @@ class TimetableManageer:
         processed_querydict.update(processed_data)  # 辞書をQueryDictに変換
 
         return processed_querydict
+    
+
+
+
+def set_current_school_period():
+    with transaction.atomic():
+        # すべての時限のフラグを False に設定
+        TimeTable.objects.update(is_current_period=False)
+        timetale_manager = TimetableManageer()
+        try:
+            current_school_period = timetale_manager.get_current_school_period()
+        except Timetable400Exception:
+            return 
+        TimeTable.objects.filter(school_period=current_school_period).update(is_current_period=True)
