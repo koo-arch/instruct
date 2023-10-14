@@ -1,4 +1,5 @@
 from asgiref.sync import async_to_sync
+from channels.db import database_sync_to_async
 from channels.layers import get_channel_layer
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
@@ -12,7 +13,6 @@ channel_layer = get_channel_layer()
 def send_patrol_status(sender, instance, **kwargs):
     status_manager = StatusManager()
     data_to_send = status_manager.get_patrol_status()
-
     async_to_sync(channel_layer.group_send)(
         "patrol_status_group",
         {

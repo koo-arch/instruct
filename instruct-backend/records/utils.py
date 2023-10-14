@@ -4,7 +4,6 @@ from .models import PatrolRecord, PatrolPlaces, CountUsersRecord, CountUsersProp
 from datetime import datetime
 
 class StatusManager:
-    @sync_to_async
     def get_patrol_status(self):
         timetable_manager = TimetableManageer()
         try:
@@ -42,7 +41,6 @@ class StatusManager:
 
         return patrol_status
 
-    @sync_to_async
     def get_count_users_status(self):
         timetable_manager = TimetableManageer()
         try:

@@ -16,10 +16,10 @@ class PatrolStatusConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
         await self.close()
 
-
-    async def get_patrol_status(self):
+    @sync_to_async
+    def get_patrol_status(self):
         status_manager = StatusManager()
-        patrol_status = await status_manager.get_patrol_status()
+        patrol_status = status_manager.get_patrol_status()
         return patrol_status
 
 
@@ -49,10 +49,10 @@ class CountUsersStatusConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
         await self.close()
 
-    
-    async def get_count_users_status(self):
+    @sync_to_async
+    def get_count_users_status(self):
         status_manager = StatusManager()
-        count_users_status = await status_manager.get_count_users_status()
+        count_users_status = status_manager.get_count_users_status()
         return count_users_status
 
 
@@ -64,6 +64,6 @@ class CountUsersStatusConsumer(AsyncWebsocketConsumer):
 
 
     async def send_data(self, event):
-        data_to_send = event['data']
+        data_to_send = event['message']
         # データをクライアントに送信
         await self.send(text_data=json.dumps(data_to_send))
