@@ -1,10 +1,20 @@
+from __future__ import absolute_import, unicode_literals
 import os
 from celery import Celery
-from django.conf import settings
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+# Djangoの設定をCeleryにロード
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'instruct.settings')
 
-app: Celery = Celery("app")
+app = Celery('instruct')
 
-app.config_from_object("django.conf:settings",namespace="CELERY")  # type: ignore
-app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)  # type: ignore
+# デフォルトの設定を読み込む
+app.config_from_object('django.conf:settings', namespace='CELERY')
+
+broker_connection_retry_on_startup = True
+
+# タスクモジュールを自動的に見つける
+app.autodiscover_tasks()
+
+@app.task(bind=True)
+def debug_task(self):
+    print('Request: {0!r}'.format(self.request))

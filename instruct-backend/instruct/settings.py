@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "django_filters",
     "corsheaders",
     "djoser",
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -86,6 +87,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "instruct.wsgi.application"
 ASGI_APPLICATION = 'instruct.routing.application'
 
+# channels 設定
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -95,23 +97,20 @@ CHANNEL_LAYERS = {
     },
 }
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://redis:6379'
-    }
-}
-
-# Celery configurations
+# Celery セッティング
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 
-# 'amqp://guest:guest@localhost//'
-# celeryを動かすための設定ファイル
-CELERY_BROKER_URL = "redis://redis:6379"
-CELERY_CACHE_BACKEND = "django-cache"
-CELERY_RESULT_EXTENDED = True
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BEAT_SCHEDULE = {
+    'check-school-period-task': {
+        'task': 'timetable.tasks.check_school_period',  # タスクのインポートパス
+        'schedule': 10,  # タスクの実行間隔（秒単位）
+    },
+}
 
 
 # Password validation
