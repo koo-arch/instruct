@@ -37,6 +37,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
     "django_filters",
     "corsheaders",
     "djoser",
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -83,7 +85,32 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "instruct.wsgi.application"
+ASGI_APPLICATION = 'instruct.routing.application'
 
+# channels 設定
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
+
+# Celery セッティング
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BEAT_SCHEDULE = {
+    'check-school-period-task': {
+        'task': 'timetable.tasks.check_school_period',  # タスクのインポートパス
+        'schedule': 10,  # タスクの実行間隔（秒単位）
+    },
+}
 
 
 # Password validation
