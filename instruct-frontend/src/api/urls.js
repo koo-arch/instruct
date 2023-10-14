@@ -10,6 +10,8 @@ const urls = {
     CountUsersStatus: `/count/users/status/`,
 
     Register: `/auth/users/`,
+    Activation: `/auth/users/activation/`,
+    ResendActivation: `/auth/users/resend_activation/`,
     UserInfo: `/auth/users/me/`,
     Login: `/auth/jwt/create/`,
     Refresh: `/auth/jwt/refresh/`,

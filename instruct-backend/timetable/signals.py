@@ -13,13 +13,7 @@ set_current_school_period()
 @receiver(post_save, sender=TimeTable)
 def send_timetable_update(sender, instance, **kwargs):
     # WebSocketにデータを送信
-    data = {
-        "id": instance.id,
-        "school_period": instance.school_period,
-        "start_time": instance.start_time,
-        "end_time": instance.end_time,
-        "is_current_period": instance.is_current_period,
-    }
+    data = { "school_period": instance.school_period }
     async_to_sync(channel_layer.group_send)(
         "timetable_group", 
         {

@@ -1,14 +1,18 @@
 export const errorMessage = (errRes, setError, setSnackbarStatus, defaultMessage = "送信に失敗しました。") => {
     Object.keys(errRes).map((key) => {
         const messages = errRes[`${key}`]
-        const newMessages = [];
-        console.log(messages)
+        let newMessages = [];
+
         // メッセージ内のスペースを削除
         console.log(typeof(messages))
         for (let i = 0; i < messages.length; i++) {
             newMessages[i] = messages[i].replace(/ /g, "")
         }
-        console.log(newMessages)
+        // messageが文字列型の時、新しいメッセージを結合して一つの配列にする(これをしないと１文字ずつ改行される)
+        if (typeof (messages) === "string") {
+            newMessages = [newMessages.join("")]
+        }
+
         if (key === "detail") {
             const snackbarMessage = '\n' + newMessages.join('\n')
             setSnackbarStatus({

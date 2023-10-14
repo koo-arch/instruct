@@ -5,6 +5,8 @@ import ResponsiveDrawer from './components/responsiveDrawer';
 import Top from './pages/top';
 import Login from './pages/login';
 import Register from './pages/register';
+import Activation from './pages/activation';
+import ResendActivation from './pages/resendActivation';
 import ResetPassword from './pages/resetPassword';
 import ResetPasswordConfirm from './pages/resetPasswordConfirm';
 import CountUsers from './pages/countUsers';
@@ -38,6 +40,8 @@ const App = () => {
               <Route path='/' element={<Top/>}/>
               <Route path='/login' element={<Login/>}/>
               <Route path='/register' element={<Register/>}/>
+              <Route path='/activate/:uid/:token' element={<Activation/>}/>
+              <Route path='/activate/resend' element={<ResendActivation/>}/>
               <Route path='/password/reset' element={<ResetPassword/>}/>
               <Route path='/password/reset/confirm/:uid/:token' element={<ResetPasswordConfirm/>} />
 

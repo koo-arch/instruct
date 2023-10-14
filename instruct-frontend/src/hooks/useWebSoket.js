@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import ReconnectingWebSocket from 'reconnecting-websocket'
+
 
 const useWebSoket = (url, textData, connectSuccess, connectFailure) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const socket = new WebSocket(url)
+        const socket = new ReconnectingWebSocket(url)
 
         socket.onopen = (event) => {
             console.log('WebSocket接続が確立されました');

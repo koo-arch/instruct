@@ -35,7 +35,6 @@ const Login = () => {
         return await axios.post(urls.Login, data);
     }
 
-    console.log(errors)
     const getJwt = (data) => {
         clearErrors();
         postLogin(data)

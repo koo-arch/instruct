@@ -38,7 +38,7 @@ const Register = () => {
                 setSnackbarStatus({
                     open: true,
                     severity: "success",
-                    message: "ユーザー登録が完了しました。"
+                    message: "メール送信が完了しました。"
                 })
             })
             .catch(err => {
@@ -123,10 +123,15 @@ const Register = () => {
                             登録
                         </Button>
                     </Box>
-                    <Grid container justifyContent="flex-end">
+                    <Grid container>
+                        <Grid item xs>
+                            <CustomLink to="/activate/resend" variant="body2">
+                                アクティベーションメール再送信
+                            </CustomLink>
+                        </Grid>
                         <Grid item>
                             <CustomLink to="/login" variant="body2">
-                                アカウントをお持ちの場合
+                                ログイン
                             </CustomLink>
                         </Grid>
                     </Grid>
