@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import PatrolPlaces, PatrolRecord, CountUsersProps, CountUsersRecord
 from datetime import date
-from timetable.utils import TimetableManageer
+from timetable.utils import TimetableManager
 
 
 class PatrolPlaceSerializer(serializers.ModelSerializer):
@@ -105,7 +105,7 @@ class CountUsersRecordSerializer(serializers.ModelSerializer):
         
         request_method = self.context['request'].method
         if request_method not in ['PUT', 'PATCH']:
-            timetable_manager = TimetableManageer()
+            timetable_manager = TimetableManager()
             current_school_period = timetable_manager.get_current_school_period()
             
             exists_record = CountUsersRecord.objects.filter(

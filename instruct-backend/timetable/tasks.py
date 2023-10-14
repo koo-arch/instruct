@@ -1,7 +1,7 @@
 from celery import shared_task
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-from .utils import TimetableManageer, Timetable400Exception
+from .utils import TimetableManager, Timetable400Exception
 from records.utils import StatusManager
 
 # 前回の学校の時間割を保持するための変数
@@ -12,7 +12,7 @@ pre_school_period = 0
 def check_school_period():
     global pre_school_period
     # 現在の時刻を取得
-    timetable_manager = TimetableManageer()
+    timetable_manager = TimetableManager()
     try:
         # 現在の学校の時間割を取得しようとするが、エラーが発生する可能性がある
         current_school_period = timetable_manager.get_current_school_period()
@@ -57,10 +57,13 @@ def check_school_period():
 
         pre_school_period = current_school_period
 
+    diff_period = current_school_period - pre_school_period
     # 前回と今回で時限数だけの差がある時、授業時間外であることを通知
-    if current_school_period - pre_school_period == current_school_period:
+    if diff_period == current_school_period and diff_period != 0:
+        
         channel_layer = get_channel_layer()
         school_period_data = {"detail": "授業時間外です"}
+
         # Channelsを使用してクライアントに授業時間外であることを通知
         async_to_sync(channel_layer.group_send)(
             "timetable_group",

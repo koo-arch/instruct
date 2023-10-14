@@ -2,7 +2,7 @@ import json
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from .models import TimeTable
-from .utils import TimetableManageer, Timetable400Exception
+from .utils import TimetableManager, Timetable400Exception
 from datetime import datetime
 
 
@@ -23,7 +23,7 @@ class TimetableConsumer(AsyncWebsocketConsumer):
 
     @sync_to_async
     def get_current_timetable(self):
-        timetable_manager = TimetableManageer()
+        timetable_manager = TimetableManager()
         try:
             current_school_period = timetable_manager.get_current_school_period()
         except Timetable400Exception as e:

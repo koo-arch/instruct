@@ -1,11 +1,11 @@
 from asgiref.sync import sync_to_async
-from timetable.utils import TimetableManageer, Timetable400Exception
+from timetable.utils import TimetableManager, Timetable400Exception
 from .models import PatrolRecord, PatrolPlaces, CountUsersRecord, CountUsersProps
 from datetime import datetime
 
 class StatusManager:
     def get_patrol_status(self):
-        timetable_manager = TimetableManageer()
+        timetable_manager = TimetableManager()
         try:
             current_AM_or_PM = timetable_manager.judge_AM_or_PM()
             current_school_period = timetable_manager.get_current_school_period()
@@ -42,7 +42,7 @@ class StatusManager:
         return patrol_status
 
     def get_count_users_status(self):
-        timetable_manager = TimetableManageer()
+        timetable_manager = TimetableManager()
         try:
             current_school_period = timetable_manager.get_current_school_period()
         except Timetable400Exception as e:

@@ -12,7 +12,7 @@ class Timetable400Exception(APIException):
     def __str__(self):
         return str(self.default_detail)
 
-class TimetableManageer:
+class TimetableManager:
     def __init__(self):
         self.queryset = TimeTable.objects.all()
   
@@ -67,7 +67,7 @@ def set_current_school_period():
     with transaction.atomic():
         # すべての時限のフラグを False に設定
         TimeTable.objects.update(is_current_period=False)
-        timetale_manager = TimetableManageer()
+        timetale_manager = TimetableManager()
         try:
             current_school_period = timetale_manager.get_current_school_period()
         except Timetable400Exception:
