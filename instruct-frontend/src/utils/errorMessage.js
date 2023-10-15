@@ -20,10 +20,11 @@ export const errorMessage = (errRes, setError, setSnackbarStatus, defaultMessage
                 severity: "error",
                 message: defaultMessage + snackbarMessage
             })
-            return
+            return null
         } else {
             setError(`${key}`, { type: "validate", message: newMessages })
         }
+        return null
 
     })
 }
@@ -39,7 +40,7 @@ export const loginErrorMessage = (errRes, setError, setSnackbarStatus, defaultMe
                 severity: "error",
                 message: defaultMessage + snackbarMessage
             })
-            return
+            return null
         } else {
             const newMessages = [];
             console.log(messages)
@@ -50,6 +51,7 @@ export const loginErrorMessage = (errRes, setError, setSnackbarStatus, defaultMe
             console.log(newMessages)
             setError(`${key}`, { type: "validate", message: newMessages })
         }
+        return null
 
     })
 }

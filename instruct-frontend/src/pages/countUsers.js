@@ -5,7 +5,7 @@ import { Container, useMediaQuery, Typography, Grid, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useCustomContext } from '../components/customContexts';
 import AccordionMenu from '../components/accordionManu';
-import RecordStatus from '../features/status/recordStatus';
+import CountUsersStatus from '../features/status/countUsersStatus';
 import CreateCountUsersRecord from '../features/countUsersRecord/createCountUsersRecord';
 import FetchCountUsersRecords from '../features/countUsersRecord/fetchCountUsersRecords';
 
@@ -36,7 +36,7 @@ const CountUsers = () => {
                     }
                 </Grid>
                 <AccordionMenu section="巡回状況">
-                    <RecordStatus/>
+                    <CountUsersStatus />
                 </AccordionMenu>
             </Container>
             <FetchCountUsersRecords/>

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import StatusField from './statusField';
 import isCompletedField from './isCompletedField';
 
-const CountUsersStatus = () => {
+const CountUsersStatus = ({title}) => {
     const countUsersStatus = useSelector(state => state.countUsersStatus)
     
     useWsCountUsersStatus();
@@ -19,7 +19,7 @@ const CountUsersStatus = () => {
             <StatusField
                 rows={countUsersStatus.status}
                 columns={columns}
-                title="利用人数記録"
+                title={title}
             />
         </div>
     )
