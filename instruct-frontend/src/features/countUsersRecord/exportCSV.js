@@ -7,16 +7,16 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { format } from 'date-fns'
 
 
-const ExportButton = () => {
+const ExportButton = ({ url, fileName }) => {
     const authAxios = useAuthAxios();
     const { setSnackbarStatus } = useCustomContext();
 
     const exportCSVRecord = () => {
-        return authAxios.get(urls.ExportCountUsers, { responseType: 'blob' })
+        return authAxios.get(url, { responseType: 'blob' })
     }
   
     const formattedDate = format(new Date(), 'yyyyMMdd');
-    const fileName = '利用人数記録_' + formattedDate + '.csv'
+    const CSVFileName = fileName +  '_' + formattedDate + '.csv'
 
 
     const exportToCSV = () => {
@@ -25,7 +25,7 @@ const ExportButton = () => {
                 const url = window.URL.createObjectURL(new Blob([res.data]));
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = fileName;
+                a.download = CSVFileName;
                 a.click();
             })
             .catch(err => {

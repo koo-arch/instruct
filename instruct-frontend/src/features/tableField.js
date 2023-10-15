@@ -13,6 +13,8 @@ const TableField = (props) => {
         title, 
         url, 
         message = "", 
+        fileName,
+        exportURL,
     } = props;
     const [openDetail, setOpenDetail] = useState(false);
     const [selectedRowData, setSelectedRowData] = useState({});
@@ -55,7 +57,10 @@ const TableField = (props) => {
                     </Grid>
                     {isAuthenticated && !isMobileSize && location.pathname === "/records/countusers" &&
                         <Grid item sx={{ marginLeft: 'auto', mb: 3, }}>
-                        <ExportButton/>
+                        <ExportButton
+                            fileName={fileName}
+                            url={exportURL}
+                        />
                     </Grid>
                     }
                 </Grid>

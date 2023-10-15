@@ -191,6 +191,7 @@ class CountUsersStatusView(generics.ListAPIView):
         count_users_status = []
         props_list = CountUsersProps.objects.filter(is_active=True)
 
+        # 巡回が完了している場所はTrueを格納
         for props in props_list:
             is_completed = queryset.filter(props=props).exists()
 
@@ -217,18 +218,19 @@ class ExportCountUsersDataView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         data = self.get_queryset()
 
+        # HTTPレスポンスを作成し、CSVファイルとして返す
         response = HttpResponse(content_type='text/csv; charset=utf-8')
-        date = datetime.now()
-        hhmm_string = date.strftime('%Y%m%d')
+        response.write(codecs.BOM_UTF8)  # UTF-8のBOM（バイト順マーク）を追加（日本語表示に必要）
 
-        response.write(codecs.BOM_UTF8)
-
+        # CSVライターを作成し、ヘッダーレコードを書き込む
         writer = csv.writer(response, delimiter=',', quotechar='"')
+        writer.writerow(['id', '日付', '時限', '場所', '部屋タイプ',
+                         '座席数', '大学PC利用人数', '私物PC利用人数'])
 
-        writer = csv.writer(response)
-        writer.writerow(['id', '日付', '時限', '場所', '部屋タイプ', '座席数', '大学PC利用人数', '私物PC利用人数'])
+        # データベースから取得したレコードをCSVファイルに書き込む
         for row in data:
-            props = row.props  # ネストされたフィールド
+            props = row.props  # ネストされたフィールドにアクセス
+
             writer.writerow([
                 row.id,
                 row.published_date,

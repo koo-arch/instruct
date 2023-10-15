@@ -32,7 +32,8 @@ const CountUsersRecords = ({record}) => {
                 columns={columns}
                 url={urls.CountUsersRecord}
                 title="記録データ"
-                
+                fileName="利用人数記録"
+                exportURL={urls.ExportCountUsers}
             />
         </div>
     )
