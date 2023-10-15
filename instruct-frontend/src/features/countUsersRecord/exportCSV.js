@@ -27,6 +27,11 @@ const ExportButton = ({ url, fileName }) => {
                 a.href = url;
                 a.download = CSVFileName;
                 a.click();
+                setSnackbarStatus({
+                    open: true,
+                    severity: "success",
+                    message: "エクスポートが完了しました。"
+                });
             })
             .catch(err => {
                 console.log(err)

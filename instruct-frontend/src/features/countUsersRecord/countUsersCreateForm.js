@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import NumberInput from './numberInput';
 import DropdownSelect from '../../components/dropdownSelect';
 import useDropdownLogic from '../../hooks/useDropdownLogic';
-import { FormControl } from '@mui/material';
+import { FormControl, Typography } from '@mui/material';
 
 const CountUsersCreateForm = () => {
     const { control, register, setValue, formState: { errors} } = useFormContext();
@@ -90,7 +90,9 @@ const CountUsersCreateForm = () => {
             )}
 
     
-            <p>{selectedSeatsNum}</p>
+            <Typography variant="body1">
+                座席数: {selectedSeatsNum}
+            </Typography>
 
             <Controller
                 name="univ_users_num"

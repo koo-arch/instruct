@@ -20,7 +20,7 @@ const RecordStatus = () => {
                 :
                 (schoolPeriod ?
                     <div>
-                        <Typography component={"h1"} variant='h4' sx={{ mb: 3 }}>
+                        <Typography component={"h1"} variant='h3' sx={{ mb: 3 }}>
                             {schoolPeriod}限巡回状況
                         </Typography>
                         <PatrolStatus title="巡回時間記録"/>
