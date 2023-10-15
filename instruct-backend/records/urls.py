@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (AllPatrolPlaceListView, ActivePatrolPlaceListView, PatrolPlaceDetailView, 
                     PatrolRecordListView, PatrolRecordDetailView, PatrolStatusView,
                     AllCountUsersPropsListView, ActiveCountUsersPropsListView, CountUsersPropsDetailView,
-                    CountUsersRecordListView, CountUsersRecordDetailView, CountUsersStatusView)
+                    CountUsersRecordListView, CountUsersRecordDetailView, CountUsersStatusView, ExportCountUsersDataView)
 
 urlpatterns = [
     path("patrol/places/", AllPatrolPlaceListView.as_view()),
@@ -20,4 +20,5 @@ urlpatterns = [
     path("count/users/record/", CountUsersRecordListView.as_view()),
     path("count/users/record/<int:pk>/", CountUsersRecordDetailView.as_view()),
     path("count/users/status/", CountUsersStatusView.as_view()),
+    path("count/users/export/csv/", ExportCountUsersDataView.as_view()),
 ]

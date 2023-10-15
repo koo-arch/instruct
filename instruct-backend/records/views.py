@@ -1,12 +1,15 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions, generics, status
 from rest_framework.response import Response
+from django.http import HttpResponse
 from datetime import datetime
 from instruct.permissons import IsAdminUserOrReadOnly, IsAuthenticatedOrReadOnly
 from .models import PatrolPlaces, PatrolRecord, CountUsersProps, CountUsersRecord
 from .serializers import PatrolPlaceSerializer, PatrolRecordSerializer, CountUsersPropsSerializer, CountUsersRecordSerializer
 from .filters import CountUsersRecordFilter
 from timetable.utils import TimetableManager
+import csv
+import codecs
 
 
 
@@ -204,3 +207,37 @@ class CountUsersRecordDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = CountUsersRecord.objects.all()
     serializer_class = CountUsersRecordSerializer
+
+
+class ExportCountUsersDataView(generics.ListAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = CountUsersRecord.objects.all()
+    serializer_class = CountUsersRecordSerializer
+
+    def list(self, request, *args, **kwargs):
+        data = self.get_queryset()
+
+        response = HttpResponse(content_type='text/csv; charset=utf-8')
+        date = datetime.now()
+        hhmm_string = date.strftime('%Y%m%d')
+
+        response.write(codecs.BOM_UTF8)
+
+        writer = csv.writer(response, delimiter=',', quotechar='"')
+
+        writer = csv.writer(response)
+        writer.writerow(['id', '日付', '時限', '場所', '部屋タイプ', '座席数', '大学PC利用人数', '私物PC利用人数'])
+        for row in data:
+            props = row.props  # ネストされたフィールド
+            writer.writerow([
+                row.id,
+                row.published_date,
+                row.school_period,
+                props.place,
+                props.room_type,
+                props.seats_num,
+                row.univ_users_num,
+                row.own_users_num,
+            ])
+
+        return response
