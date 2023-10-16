@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import NumberInput from './numberInput';
+import { Typography } from '@mui/material';
 
 const CountUsersUpdateForm = (props) => {
     const {
@@ -33,7 +34,9 @@ const CountUsersUpdateForm = (props) => {
         <div>
 
 
-            <p>{selectedSeatsNum}</p>
+            <Typography variant="body1">
+                座席数: {selectedSeatsNum}
+            </Typography>
 
             <Controller
                 name="univ_users_num"

@@ -1,11 +1,15 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import ReconnectingWebSocket from 'reconnecting-websocket'
+import { server } from '../api/axios';
+
 
 const useWebSoket = (url, textData, connectSuccess, connectFailure) => {
     const dispatch = useDispatch();
+    const WSBaseURL = server.replace(/http/g, "ws") + "/ws"
 
     useEffect(() => {
-        const socket = new WebSocket(url)
+        const socket = new ReconnectingWebSocket(WSBaseURL + url)
 
         socket.onopen = (event) => {
             console.log('WebSocket接続が確立されました');

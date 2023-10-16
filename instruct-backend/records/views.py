@@ -1,12 +1,15 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions, generics, status
 from rest_framework.response import Response
+from django.http import HttpResponse
 from datetime import datetime
 from instruct.permissons import IsAdminUserOrReadOnly, IsAuthenticatedOrReadOnly
 from .models import PatrolPlaces, PatrolRecord, CountUsersProps, CountUsersRecord
 from .serializers import PatrolPlaceSerializer, PatrolRecordSerializer, CountUsersPropsSerializer, CountUsersRecordSerializer
 from .filters import CountUsersRecordFilter
 from timetable.utils import TimetableManager
+import csv
+import codecs
 
 
 
@@ -188,6 +191,7 @@ class CountUsersStatusView(generics.ListAPIView):
         count_users_status = []
         props_list = CountUsersProps.objects.filter(is_active=True)
 
+        # 巡回が完了している場所はTrueを格納
         for props in props_list:
             is_completed = queryset.filter(props=props).exists()
 
@@ -204,3 +208,38 @@ class CountUsersRecordDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = CountUsersRecord.objects.all()
     serializer_class = CountUsersRecordSerializer
+
+
+class ExportCountUsersDataView(generics.ListAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = CountUsersRecord.objects.all()
+    serializer_class = CountUsersRecordSerializer
+
+    def list(self, request, *args, **kwargs):
+        data = self.get_queryset()
+
+        # HTTPレスポンスを作成し、CSVファイルとして返す
+        response = HttpResponse(content_type='text/csv; charset=utf-8')
+        response.write(codecs.BOM_UTF8)  # UTF-8のBOM（バイト順マーク）を追加（日本語表示に必要）
+
+        # CSVライターを作成し、ヘッダーレコードを書き込む
+        writer = csv.writer(response, delimiter=',', quotechar='"')
+        writer.writerow(['id', '日付', '時限', '場所', '部屋タイプ',
+                         '座席数', '大学PC利用人数', '私物PC利用人数'])
+
+        # データベースから取得したレコードをCSVファイルに書き込む
+        for row in data:
+            props = row.props  # ネストされたフィールドにアクセス
+
+            writer.writerow([
+                row.id,
+                row.published_date,
+                row.school_period,
+                props.place,
+                props.room_type,
+                props.seats_num,
+                row.univ_users_num,
+                row.own_users_num,
+            ])
+
+        return response

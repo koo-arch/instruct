@@ -4,7 +4,7 @@ import { countUsersStatusFetchSuccess, countUsersStatusFetchFailure } from '../r
 import urls from '../api/urls';
 
 const useWsCountUsersStatus = () => {
-    const url = 'ws://127.0.0.1:8000/ws' + urls.CountUsersStatus;
+    const url = urls.CountUsersStatus;
 
     useWebSoket(url, "get_count_users_status", countUsersStatusFetchSuccess, countUsersStatusFetchFailure)
     return null

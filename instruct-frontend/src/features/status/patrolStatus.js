@@ -5,7 +5,7 @@ import StatusField from './statusField';
 import isCompletedField from './isCompletedField';
 
 
-const PatrolStatus = () => {
+const PatrolStatus = ({title}) => {
   const patrolStatus = useSelector(state => state.patrolStatus)
   useWsPatrolStatus();
 
@@ -19,7 +19,7 @@ const PatrolStatus = () => {
       <StatusField
         rows={patrolStatus.status}
         columns={columns}
-        title="巡回時間記録"
+        title={title}
       />
     </div>
   )

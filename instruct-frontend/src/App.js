@@ -5,13 +5,16 @@ import ResponsiveDrawer from './components/responsiveDrawer';
 import Top from './pages/top';
 import Login from './pages/login';
 import Register from './pages/register';
+import Activation from './pages/activation';
+import ResendActivation from './pages/resendActivation';
+import Account from './pages/account';
 import ResetPassword from './pages/resetPassword';
 import ResetPasswordConfirm from './pages/resetPasswordConfirm';
 import CountUsers from './pages/countUsers';
 import PatrolTime from './pages/patrolTime';
 import NotFound from './pages/notFound';
-import { CssBaseline } from '@mui/material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { CssBaseline, useMediaQuery } from '@mui/material';
+import { ThemeProvider, createTheme, typography } from '@mui/material/styles';
 
 const App = () => {
   const theme = createTheme({
@@ -28,6 +31,15 @@ const App = () => {
       },
     },
   });
+  theme.typography.h3 = {
+    fontSize: '1.6rem',
+    '@media (min-width:600px)': {
+      fontSize: '1.8rem',
+    },
+    [theme.breakpoints.up('md')]: {
+      fontSize: '2.4rem',
+    },
+  };
   return(
     <ThemeProvider theme={theme}>
       <CssBaseline/>
@@ -38,6 +50,10 @@ const App = () => {
               <Route path='/' element={<Top/>}/>
               <Route path='/login' element={<Login/>}/>
               <Route path='/register' element={<Register/>}/>
+              <Route path='/activate/:uid/:token' element={<Activation/>}/>
+              <Route path='/activate/resend' element={<ResendActivation/>}/>
+              <Route path='/account' element={<Account/>}/>
+
               <Route path='/password/reset' element={<ResetPassword/>}/>
               <Route path='/password/reset/confirm/:uid/:token' element={<ResetPasswordConfirm/>} />
 

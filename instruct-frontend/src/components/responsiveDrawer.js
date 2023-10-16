@@ -34,8 +34,11 @@ const ResponsiveDrawer = ({ children }) => {
     const [open, setOpen] = useState(false);
 
     // ドロワーの開閉を制御する関数
-    const handleDrawerToggle = () => {
-        setOpen(!open);
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    };
+    const handleDrawerClose = () => {
+        setOpen(false);
     };
 
     // ドロワー内のリストアイテムの内容を設定
@@ -45,7 +48,7 @@ const ResponsiveDrawer = ({ children }) => {
                 {isAuthenticated ?
                     // ログインしている場合はユーザー名を表示するリストアイテム
                     <div>
-                        <ListItemButton component={Link} to="/account" onClick={handleDrawerToggle}>
+                        <ListItemButton component={Link} to="/account" onClick={handleDrawerClose}>
                             <ListItemText primary={user.username} />
                         </ListItemButton>
                     </div>
@@ -54,19 +57,19 @@ const ResponsiveDrawer = ({ children }) => {
                     <Toolbar />
                 }
                 <Divider />
-                <ListItemButton component={Link} to="/" onClick={handleDrawerToggle}>
+                <ListItemButton component={Link} to="/" onClick={handleDrawerClose}>
                     <ListItemIcon>
                         <HomeIcon />
                     </ListItemIcon>
                     <ListItemText primary="トップページ" />
                 </ListItemButton>
-                <ListItemButton component={Link} to="/records/countusers" onClick={handleDrawerToggle}>
+                <ListItemButton component={Link} to="/records/countusers" onClick={handleDrawerClose}>
                     <ListItemIcon>
                         <FormatListBulletedIcon />
                     </ListItemIcon>
                     <ListItemText primary="利用人数記録" />
                 </ListItemButton>
-                <ListItemButton component={Link} to="/records/patroltime" onClick={handleDrawerToggle}>
+                <ListItemButton component={Link} to="/records/patroltime" onClick={handleDrawerClose}>
                     <ListItemIcon>
                         <AccessTimeIcon />
                     </ListItemIcon>
@@ -99,7 +102,7 @@ const ResponsiveDrawer = ({ children }) => {
                         color="inherit"
                         aria-label="open drawer"
                         edge="start"
-                        onClick={handleDrawerToggle}
+                        onClick={handleDrawerOpen}
                         sx={{ mr: 2, display: { md: 'none' } }}
                     >
                         <MenuIcon />
@@ -121,7 +124,7 @@ const ResponsiveDrawer = ({ children }) => {
                 {/* レスポンシブなドロワー（サイドメニュー） */}
                 <Drawer
                     open={open}
-                    onClose={handleDrawerToggle}
+                    onClose={handleDrawerClose}
                     variant="temporary"
                     ModalProps={{
                         keepMounted: true, // モバイルデバイスでのパフォーマンス向上のため

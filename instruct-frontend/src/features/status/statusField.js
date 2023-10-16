@@ -3,11 +3,10 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Box, Typography, Container } from '@mui/material';
 
 const StatusField = ({ rows, columns, title }) => {
-
-    if (rows.length === 0) {
+    if (!rows.length) {
         return(
-            <Typography component={"h2"} variant='h5' textAlign="center" sx={{ mt : 6, mb: 6 }}>
-                現在の巡回場所はありません
+            <Typography component={"h2"} variant='h5' textAlign="center" sx={{ mt : 2, mb: 2 }}>
+                授業時間外
             </Typography>
         )
     }

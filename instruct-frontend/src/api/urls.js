@@ -2,14 +2,18 @@ const urls = {
     Timetable: `/timetable/`,
     CurrentTimetable: `/timetable/current/`,
     
-    PatrolPlaces: `/patrol/places/`,
+    PatrolPlaces: `/patrol/places/active/`,
     PatrolRecord: `/patrol/record/`,
     PatrolStatus: `/patrol/status/`,
-    CountUsersProps: `/count/users/props/`,
+    
+    CountUsersProps: `/count/users/props/active/`,
     CountUsersRecord: `/count/users/record/`,
     CountUsersStatus: `/count/users/status/`,
+    ExportCountUsers: `/count/users/export/csv/`,
 
     Register: `/auth/users/`,
+    Activation: `/auth/users/activation/`,
+    ResendActivation: `/auth/users/resend_activation/`,
     UserInfo: `/auth/users/me/`,
     Login: `/auth/jwt/create/`,
     Refresh: `/auth/jwt/refresh/`,

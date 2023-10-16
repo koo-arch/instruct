@@ -108,7 +108,7 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_BEAT_SCHEDULE = {
     'check-school-period-task': {
         'task': 'timetable.tasks.check_school_period',  # タスクのインポートパス
-        'schedule': 10,  # タスクの実行間隔（秒単位）
+        'schedule': 900,  # タスクの実行間隔（秒単位）
     },
 }
 
@@ -221,6 +221,7 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
     'PASSWORD_RESET_TIMEOUT': 3600,  # リセットURLの有効期限（秒単位）
     'USERNAME_RESET_TIMEOUT': 3600,
+    'ACTIVATION_TOKEN_EXPIRATION': 1,
 
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.CustomUserSerializer',
