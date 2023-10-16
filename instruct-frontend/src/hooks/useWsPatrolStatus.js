@@ -3,7 +3,7 @@ import { patrolStatusFetchSuccess, patrolStatusFetchFailure } from '../redux/pat
 import urls from '../api/urls';
 
 const useWsPatrolStatus = () => {
-    const url = 'ws://127.0.0.1:8000/ws' + urls.PatrolStatus;
+    const url = urls.PatrolStatus;
 
     useWebSoket(url, "get_patrol_status", patrolStatusFetchSuccess, patrolStatusFetchFailure)
     
