@@ -5,6 +5,7 @@ import { Container, useMediaQuery, Typography, Grid, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useCustomContext } from '../components/customContexts';
 import AccordionMenu from '../components/accordionManu';
+import useWsCurrentTimetable from '../hooks/useWsCurrentTimetable';
 import CountUsersStatus from '../features/status/countUsersStatus';
 import CreateCountUsersRecord from '../features/countUsersRecord/createCountUsersRecord';
 import FetchCountUsersRecords from '../features/countUsersRecord/fetchCountUsersRecords';
@@ -15,6 +16,8 @@ const CountUsers = () => {
     const { snackbarStatus } = useCustomContext();
     const isMobileSize = useMediaQuery('(max-width: 500px');
     const openRef = useRef();
+
+    useWsCurrentTimetable()
 
     const openCreateRecord = () => openRef.current.click();
     return (

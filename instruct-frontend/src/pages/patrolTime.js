@@ -5,6 +5,7 @@ import { Container, useMediaQuery, Typography, Grid, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useCustomContext } from '../components/customContexts';
 import AccordionMenu from '../components/accordionManu';
+import useWsCurrentTimetable from '../hooks/useWsCurrentTimetable';
 import PatrolStatus from '../features/status/patrolStatus';
 import CreatePatrolRecord from '../features/patrolTime/createPatrolRecord';
 import FetchPatrolRecords from '../features/patrolTime/fetchPatrolRecords';
@@ -15,6 +16,8 @@ const PatrolTime = () => {
     const { snackbarStatus } = useCustomContext();
     const isMobileSize = useMediaQuery('(max-width: 500px');
     const openRef = useRef();
+
+    useWsCurrentTimetable();
 
     const openCreateRecord = () => openRef.current.click();
     return (

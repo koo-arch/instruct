@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils import timezone
+from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from django.core.mail import send_mail
 from django.contrib.auth.base_user import BaseUserManager
@@ -15,7 +16,7 @@ class UserManager(BaseUserManager):
         Create and save a user with the given username, email, and password.
         """
         if not email:
-            raise ValueError('The given username must be set')
+            raise serializers.ValidationError({"email": "メールアドレスは必須です"})
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -25,8 +26,14 @@ class UserManager(BaseUserManager):
     def create_user(self, email=None, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
-        return self._create_user(email, password, **extra_fields)
+        # if email:
+        #     domain = email.split('@')[1]
+        #     if domain == 'gakushuin.ac.jp':
+        #         return self._create_user(email, password, **extra_fields)
+        #     else:
+        #         raise serializers.ValidationError({"email": "@gakushuin.ac.jpのみ有効です"})
 
+        
     def create_superuser(self, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)

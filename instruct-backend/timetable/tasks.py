@@ -11,26 +11,29 @@ pre_school_period = 0
 @shared_task
 def check_school_period():
     global pre_school_period
-    # 現在の時刻を取得
+
     timetable_manager = TimetableManager()
     try:
-        # 現在の学校の時間割を取得しようとするが、エラーが発生する可能性がある
+        # 現在の時限を取得
         current_school_period = timetable_manager.get_current_school_period()
     except Timetable400Exception:
-        # エラーが発生した場合、前回の学校の時間割を使用
-        current_school_period = pre_school_period
-        pre_school_period = 0
+        # 授業時間外の場合は0
+        current_school_period = 0
 
-    # 前回の学校の時間割と現在の学校の時間割を比較
-    if pre_school_period < current_school_period:
+
+    diff_period = current_school_period - pre_school_period
+
+    # 現在と前回の時限の差が正の時、時限の変更を送信
+    if diff_period > 0:
         channel_layer = get_channel_layer()
 
+        # 送信するデータをセット
         status_manager = StatusManager()
         patrol_status_data = status_manager.get_patrol_status()
         count_users_status_data = status_manager.get_count_users_status()
         school_period_data = {"school_period": current_school_period}
 
-        # Channelsを使用してクライアントに学校の時間割の変更を通知
+        # Channelsを使用してフロント側に時限の変更を通知
         async_to_sync(channel_layer.group_send)(
             "timetable_group",
             {
@@ -55,16 +58,13 @@ def check_school_period():
             }
         )
 
-        pre_school_period = current_school_period
 
-    diff_period = current_school_period - pre_school_period
-    # 前回と今回で時限数だけの差がある時、授業時間外であることを通知
-    if diff_period == current_school_period and diff_period != 0:
+    # 差が負の時、授業時間外を通知（一度通知したら翌1限まで通知しない）
+    if diff_period < 0:
         
         channel_layer = get_channel_layer()
         school_period_data = {"detail": "授業時間外です"}
 
-        # Channelsを使用してクライアントに授業時間外であることを通知
         async_to_sync(channel_layer.group_send)(
             "timetable_group",
             {
@@ -72,8 +72,9 @@ def check_school_period():
                 "message": school_period_data,
             }
         )
-        # 前回の時間割をリセット（これ以降は時間外でも翌1限まで通知しない）
-        pre_school_period = 0
+    
+    # 前回の時限を更新
+    pre_school_period = current_school_period
 
-    # 現在の学校の時間割と前回の学校の時間割を返す
+
     return current_school_period, pre_school_period

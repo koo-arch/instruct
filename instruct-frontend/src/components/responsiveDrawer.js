@@ -63,17 +63,17 @@ const ResponsiveDrawer = ({ children }) => {
                     </ListItemIcon>
                     <ListItemText primary="トップページ" />
                 </ListItemButton>
-                <ListItemButton component={Link} to="/records/countusers" onClick={handleDrawerClose}>
-                    <ListItemIcon>
-                        <FormatListBulletedIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="利用人数記録" />
-                </ListItemButton>
                 <ListItemButton component={Link} to="/records/patroltime" onClick={handleDrawerClose}>
                     <ListItemIcon>
                         <AccessTimeIcon />
                     </ListItemIcon>
                     <ListItemText primary="巡回時間記録" />
+                </ListItemButton>
+                <ListItemButton component={Link} to="/records/countusers" onClick={handleDrawerClose}>
+                    <ListItemIcon>
+                        <FormatListBulletedIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="利用人数記録" />
                 </ListItemButton>
             </List>
         </div>
