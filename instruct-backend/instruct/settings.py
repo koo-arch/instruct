@@ -238,9 +238,6 @@ DJOSER = {
     'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
     # パスワードリセット完了用URL
     'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
-    'PASSWORD_RESET_TIMEOUT': 3600,  # リセットURLの有効期限（秒単位）
-    'USERNAME_RESET_TIMEOUT': 3600,
-    'ACTIVATION_TOKEN_EXPIRATION': 1,
 
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.CustomUserSerializer',
