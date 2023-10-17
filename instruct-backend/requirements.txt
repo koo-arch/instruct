@@ -20,6 +20,7 @@ cron-descriptor==1.4.0
 cryptography==41.0.3
 daphne==4.0.0
 defusedxml==0.7.1
+dj-database-url==2.1.0
 Django==4.2.4
 django-celery-beat==2.5.0
 django-cors-headers==4.2.0
