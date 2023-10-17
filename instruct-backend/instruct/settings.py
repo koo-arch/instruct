@@ -10,14 +10,18 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
+from os.path import join, dirname
 from pathlib import Path
-
+from dotenv import load_dotenv
 from datetime import timedelta
 
-try:
-    from .local_settings import *
-except ImportError:
-    pass
+# .envファイルの内容を読み込見込む
+load_dotenv(verbose=True)
+
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,10 +32,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': os.environ.get("DATABASES_ENGINE"),
+        'NAME': os.environ.get("DATABASES_NAME"),
+        'USER': os.environ.get("DATABASES_USER"),
+        'PASSWORD': os.environ.get("DATABASES_PASSWORD"),
+        'HOST': os.environ.get("localhost"),
+    }
+}
 
 
 # Application definition
@@ -92,23 +111,23 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [(os.environ.get("REDIS_HOST"), os.environ.get("REDIS_PORT"))],
         },
     },
 }
 
 # Celery セッティング
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = os.environ.get("REDIS_URL")
+CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL")
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = os.environ.get("REDIS_URL")
 CELERY_BEAT_SCHEDULE = {
     'check-school-period-task': {
         'task': 'timetable.tasks.check_school_period',  # タスクのインポートパス
-        'schedule': 900,  # タスクの実行間隔（秒単位）
+        'schedule': 10,  # タスクの実行間隔（秒単位）
     },
 }
 
@@ -148,10 +167,10 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-BACKEND_URL = "http://localhost:3000"
+FRONTEND_SERVER = os.environ.get("FRONTEND_SERVER")
 
 CORS_ORIGIN_WHITELIST = [
-    BACKEND_URL,
+    FRONTEND_SERVER,
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
@@ -182,16 +201,16 @@ SIMPLE_JWT = {
 }
 
 # ローカル確認用
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # 本番環境用
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'xxx@gmail.com'
-EMAIL_HOST_PASSWORD = 'xxx'
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'xxx@gmail.com'
+# DEFAULT_FROM_EMAIL = 'xxx@gmail.com'
 
 DJOSER = {
     'TOKEN_MODEL': None,
