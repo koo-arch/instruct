@@ -25,7 +25,6 @@ class PatrolRecord(models.Model):
     published_date = models.DateField(auto_now_add=True)
     published_time = models.TimeField(auto_now_add=True)
     AM_or_PM = models.CharField(max_length=10)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self) -> str:
         return f"{self.place} {self.published_date} {self.published_time}"
@@ -53,7 +52,6 @@ class CountUsersRecord(models.Model):
     published_date = models.DateField(auto_now_add=True)
     published_time = models.TimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self) -> str:
         return f"{self.props} {self.univ_users_num} {self.own_users_num}"

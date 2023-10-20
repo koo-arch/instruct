@@ -8,13 +8,15 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 """
 
 import os
-
-from django.core.asgi import get_asgi_application
-from .celery import app as celery_app
-
+import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "instruct.settings")
+django.setup()
+from channels.routing import get_default_application
+import records.routing
+import timetable.routing
+from .celery import app as celery_app
 
-application = get_asgi_application()
+application = get_default_application()
 
 __all__ = ("celery_app",)

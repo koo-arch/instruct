@@ -15,7 +15,6 @@ class PatrolRecordSerializer(serializers.ModelSerializer):
     place = serializers.PrimaryKeyRelatedField(queryset=PatrolPlaces.objects.all())
     published_date=serializers.DateField(read_only=True)
     published_time=serializers.TimeField(read_only=True)
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     class Meta:
         model = PatrolRecord
         fields ="__all__"
@@ -64,7 +63,6 @@ class CountUsersPropsSerializer(serializers.ModelSerializer):
 
 
 class CountUsersRecordSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     props = serializers.PrimaryKeyRelatedField(queryset=CountUsersProps.objects.all())
     published_date = serializers.DateField(read_only=True)
     published_time = serializers.TimeField(read_only=True)

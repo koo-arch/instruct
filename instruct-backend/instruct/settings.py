@@ -15,6 +15,7 @@ from os.path import join, dirname
 from pathlib import Path
 from dotenv import load_dotenv
 from datetime import timedelta
+import dj_database_url
 
 # .envファイルの内容を読み込見込む
 load_dotenv(verbose=True)
@@ -43,20 +44,14 @@ ALLOWED_HOSTS = []
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': os.environ.get("DATABASES_ENGINE"),
-        'NAME': os.environ.get("DATABASES_NAME"),
-        'USER': os.environ.get("DATABASES_USER"),
-        'PASSWORD': os.environ.get("DATABASES_PASSWORD"),
-        'HOST': os.environ.get("localhost"),
-    }
+    'default': dj_database_url.config()
 }
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    "daphne",
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -111,7 +106,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [(os.environ.get("REDIS_HOST"), os.environ.get("REDIS_PORT"))],
+            "hosts": [(os.environ.get("REDIS_URL"))],
         },
     },
 }
@@ -162,12 +157,16 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 FRONTEND_SERVER = os.environ.get("FRONTEND_SERVER")
+
+FRONTEND_URL = FRONTEND_SERVER + os.environ.get("FRONTEND_URL")
 
 CORS_ORIGIN_WHITELIST = [
     FRONTEND_SERVER,
@@ -200,8 +199,6 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': True,
 }
 
-# ローカル確認用
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # 本番環境用
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -210,7 +207,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
-# DEFAULT_FROM_EMAIL = 'xxx@gmail.com'
 
 DJOSER = {
     'TOKEN_MODEL': None,
@@ -260,3 +256,8 @@ DJOSER = {
         'username_changed_confirmation': 'accounts.email.EmailChangedConfirmationEmail',
     },
 }
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

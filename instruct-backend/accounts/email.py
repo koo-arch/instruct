@@ -27,7 +27,7 @@ class ActivationEmail(EmailManager):
         context["username"] = user.username
         context["uid"] = utils.encode_uid(user.pk)
         context["token"] = default_token_generator.make_token(user)
-        context["backend"] = settings.FRONTEND_SERVER
+        context["frontend"] = settings.FRONTEND_SERVER
         context["url"] = settings.DJOSER["ACTIVATION_URL"].format(**context)
         return context
 
@@ -51,7 +51,7 @@ class PasswordResetEmail(EmailManager):
         context["username"] = user.username
         context["uid"] = utils.encode_uid(user.pk)
         context["token"] = default_token_generator.make_token(user)
-        context["backend"] = settings.FRONTEND_SERVER
+        context["frontend"] = settings.FRONTEND_SERVER
         context["url"] = settings.DJOSER["PASSWORD_RESET_CONFIRM_URL"].format(**context)
         return context
 
@@ -75,7 +75,7 @@ class EmailResetEmail(EmailManager):
         context["username"] = user.username
         context["uid"] = utils.encode_uid(user.pk)
         context["token"] = default_token_generator.make_token(user)
-        context["backend"] = settings.FRONTEND_SERVER
+        context["frontend"] = settings.FRONTEND_SERVER
         context["url"] = settings.DJOSER["USERNAME_RESET_CONFIRM_URL"].format(**context)
         return context
 
