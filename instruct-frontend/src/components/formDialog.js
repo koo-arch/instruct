@@ -24,7 +24,7 @@ const FormDialog = (props) => {
             >
                 <DialogTitle>{title}</DialogTitle>
                 <DialogContent>
-                    <Box sx={{ ...(isMobileSize ? {} : { minWidth: 400 }), }}>
+                    <Box sx={{ ...(isMobileSize ? { minWidth: 250 } : { minWidth: 400 }), }}>
                     </Box>
                     {children}
                 </DialogContent>

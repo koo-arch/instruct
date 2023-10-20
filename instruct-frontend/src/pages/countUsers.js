@@ -38,12 +38,17 @@ const CountUsers = () => {
                         </Grid>
                     }
                 </Grid>
-                <AccordionMenu section="巡回状況">
-                    <CountUsersStatus />
-                </AccordionMenu>
+                {
+                    isMobileSize ?
+                        <CountUsersStatus title="巡回状況"/>
+                    :
+                    <AccordionMenu section="巡回状況">
+                        <CountUsersStatus />
+                    </AccordionMenu>
+                }
             </Container>
-            <FetchCountUsersRecords/>
-            <CreateCountUsersRecord create={openRef}/>
+            <FetchCountUsersRecords />
+            <CreateCountUsersRecord create={openRef} />
             <CustomSnackbar {...snackbarStatus} />
         </div>
     )

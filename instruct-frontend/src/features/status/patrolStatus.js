@@ -3,10 +3,12 @@ import useWsPatrolStatus from '../../hooks/useWsPatrolStatus';
 import { useSelector } from 'react-redux';
 import StatusField from './statusField';
 import isCompletedField from './isCompletedField';
+import Loading from '../../components/loading';
 
 
 const PatrolStatus = ({title}) => {
   const patrolStatus = useSelector(state => state.patrolStatus)
+  const isLoading = patrolStatus.isLoading
   useWsPatrolStatus();
 
   const columns = [
@@ -16,11 +18,16 @@ const PatrolStatus = ({title}) => {
 
   return (
     <div>
-      <StatusField
-        rows={patrolStatus.status}
-        columns={columns}
-        title={title}
-      />
+      {
+        isLoading ? 
+          <Loading open={isLoading} />
+        :
+        <StatusField
+          rows={patrolStatus.status}
+          columns={columns}
+          title={title}
+        />
+      }
     </div>
   )
 }

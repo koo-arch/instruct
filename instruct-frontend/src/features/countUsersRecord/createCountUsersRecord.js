@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useCustomContext } from '../../components/customContexts';
@@ -24,8 +24,11 @@ const CreateCountUsersRecord = (props) => {
     const fetchCountUsersProps = useFetchCountUsersProps(); // 非同期データの読み込みをトリガー
 
 
-    const openDialog = async () => {
-        await fetchCountUsersProps(); // データの読み込みが完了するまで待つ
+    useEffect(() => {
+        fetchCountUsersProps();
+    }, []);
+    
+    const openDialog = () => {
         setDialogIsOpen(true); // データが読み込まれたらダイアログを開く
     };
     const closeDialog = () => setDialogIsOpen(false);
@@ -57,11 +60,11 @@ const CreateCountUsersRecord = (props) => {
     return (
         <div>
             {isAuthenticated && 
-            <div className='fab-container'>
-                <Fab color="primary" onClick={openDialog} ref={create}>
-                    <AddIcon fontSize='large' />
-                </Fab>
-            </div>
+                <div className='fab-container'>
+                    <Fab color="primary" onClick={openDialog} ref={create}>
+                        <AddIcon fontSize='large' />
+                    </Fab>
+                </div>
             }
             <FormDialog
                 open={dialogIsOpen}

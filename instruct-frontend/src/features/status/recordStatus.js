@@ -11,12 +11,13 @@ const RecordStatus = () => {
     useWsCurrentTimetable();
     
     const schoolPeriod = currentTimetable.period?.school_period
+    const detail = currentTimetable.period?.detail
     const isLoading = currentTimetable.isLoading
     
     return (
         <div>
             {isLoading ?
-                <Loading open={isLoading} />
+                <Loading open={isLoading && !schoolPeriod && !detail} />
                 :
                 (schoolPeriod ?
                     <div>

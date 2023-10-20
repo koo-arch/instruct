@@ -34,6 +34,7 @@ const NumberInput = (props) => {
             <IconButton
                 color="primary"
                 onClick={handleDecrement}
+                size='large'
             >
                 <RemoveIcon />
             </IconButton>
@@ -54,6 +55,7 @@ const NumberInput = (props) => {
             <IconButton
                 color="primary"
                 onClick={handleIncrement}
+                size='large'
             >
                 <AddIcon />
             </IconButton>

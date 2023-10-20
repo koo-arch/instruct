@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCustomContext } from '../../components/customContexts';
 import useAuthAxios from '../../hooks/useAuthAxios';
@@ -25,9 +25,13 @@ const DeleteCountUsersRecord = (props) => {
     const fetchCountUsersProps = useFetchCountUsersProps(); // 非同期データの読み込みをトリガー
 
 
-    const openDialog = async () => {
-        await fetchCountUsersProps(); // データの読み込みが完了するまで待つ
-        setDialogIsOpen(true); // データが読み込まれたらダイアログを開く
+    useEffect(() => {
+        fetchCountUsersProps();
+    }, []);
+    
+
+    const openDialog = () => {
+        setDialogIsOpen(true);
     };
     const closeDialog = () => setDialogIsOpen(false);
 

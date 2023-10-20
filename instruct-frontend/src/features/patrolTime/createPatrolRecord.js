@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useCustomContext } from '../../components/customContexts';
@@ -23,9 +23,11 @@ const CreatePatrolRecord = (props) => {
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
     const fetchPatrolPlaces = useFetchPatrolPlaces(); // 非同期データの読み込みをトリガー
 
+    useEffect(() => {
+        fetchPatrolPlaces();
+    }, []);
 
-    const openDialog = async () => {
-        await fetchPatrolPlaces(); // データの読み込みが完了するまで待つ
+    const openDialog = () => {
         setDialogIsOpen(true); // データが読み込まれたらダイアログを開く
     };
     const closeDialog = () => setDialogIsOpen(false);

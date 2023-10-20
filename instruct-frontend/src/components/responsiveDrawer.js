@@ -121,7 +121,7 @@ const ResponsiveDrawer = ({ children }) => {
                 sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
                 aria-label="mailbox folders"
             >
-                {/* レスポンシブなドロワー（サイドメニュー） */}
+                {/* モバイル用ドロワー */}
                 <Drawer
                     open={open}
                     onClose={handleDrawerClose}
@@ -136,7 +136,7 @@ const ResponsiveDrawer = ({ children }) => {
                 >
                     {drawer}
                 </Drawer>
-                {/* デスクトップバージョンのドロワー */}
+                {/* デスクトップ用ドロワー */}
                 <Drawer
                     variant="permanent"
                     sx={{
@@ -147,17 +147,15 @@ const ResponsiveDrawer = ({ children }) => {
                 >
                     {drawer}
                 </Drawer>
-                </Box>
-                {/* メインコンテンツ */}
-                <Box
-                    component="main"
-                    sx={{ flexGrow: 1, p: 3, width: { md: `calc(100% - ${drawerWidth}px)` } }}
-                >
-                    <Toolbar />
-                    {children}
-                </Box>
-            {/* フッター */}
-            <Toolbar />
+            </Box>
+            {/* メインコンテンツ */}
+            <Box
+                component="main"
+                sx={{ flexGrow: 1, p: 3, width: { md: `calc(100% - ${drawerWidth}px)` } }}
+            >
+                <Toolbar />
+                {children}
+            </Box>
         </Box>
     );
 };

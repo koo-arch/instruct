@@ -38,11 +38,16 @@ const PatrolTime = () => {
                         </Grid>
                     }
                 </Grid>
-                <AccordionMenu section="巡回状況">
-                    <PatrolStatus />
-                </AccordionMenu>
+                {
+                    isMobileSize ?
+                        <PatrolStatus title="巡回状況"/>
+                    :
+                    <AccordionMenu section="巡回状況">
+                        <PatrolStatus />
+                    </AccordionMenu>
+                }
             </Container>
-            <FetchPatrolRecords/>
+            <FetchPatrolRecords />
             <CreatePatrolRecord create={openRef} />
             <CustomSnackbar {...snackbarStatus} />
         </div>
