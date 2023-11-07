@@ -6,13 +6,13 @@ import ExportButton from './countUsersRecord/exportCSV';
 import { Box, Container, Typography, Grid, useMediaQuery } from '@mui/material';
 
 const TableField = (props) => {
-    const { 
-        displayComponent: DisplayComponent, 
-        rows, 
-        columns, 
-        title, 
-        url, 
-        message = "", 
+    const {
+        displayComponent: DisplayComponent,
+        rows,
+        columns,
+        title,
+        url,
+        message = "",
         fileName,
         exportURL,
     } = props;
@@ -22,7 +22,7 @@ const TableField = (props) => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const isMobileSize = useMediaQuery('(max-width: 500px)')
 
-    
+
     const defaultSortModel = [
         {
             field: 'id',
@@ -37,47 +37,51 @@ const TableField = (props) => {
 
     const handleClose = () => setOpenDetail(false);
 
-    if (rows.length === 0 && message !== "") {
-        return(
-            <Typography component={"h2"} variant='h5' textAlign="center" sx={{ mt : 6, mb: 6 }}>
-                {message}
-            </Typography>
-        )
-    } else if (rows.length === 0) {
-        return null;
-    }
-    return(
+    return (
         <Box sx={{ mb: 4 }}>
             <Container>
                 <Grid container sx={{ mt: 3, mb: 1 }}>
                     <Grid item>
-                        <Typography component={"h2"} variant='h5' sx={{ mb: 1, mt : 2 }}>
+                        <Typography component={"h2"} variant='h5' sx={{ mb: 1, mt: 2 }}>
                             {title}
                         </Typography>
                     </Grid>
-                    {isAuthenticated && !isMobileSize && location.pathname === "/records/countusers" &&
+                    {isAuthenticated && !isMobileSize && location.pathname === "/records/countusers" && rows.length !== 0 &&
                         <Grid item sx={{ marginLeft: 'auto', mb: 3, }}>
-                        <ExportButton
-                            fileName={fileName}
-                            url={exportURL}
-                        />
-                    </Grid>
+                            <ExportButton
+                                fileName={fileName}
+                                url={exportURL}
+                            />
+                        </Grid>
                     }
                 </Grid>
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    onCellClick={handleCellClick}
-                    disableColumnMenu
-                    sortModel={defaultSortModel}
-                    sx={{ mb : 10 }}
-                />
-                <DisplayComponent
-                    open={openDetail} 
-                    onClose={handleClose} 
-                    rowData={selectedRowData}
-                    url={url}
-                />
+                {rows.length === 0 && message !== "" ?
+                    <Typography component={"h2"} variant='h5' textAlign="center" sx={{ mt: 6, mb: 6 }}>
+                        {message}
+                    </Typography>
+                    :
+                    <div>
+                        {
+                            rows.length !== 0 &&
+                                <div>
+                                    <DataGrid
+                                        rows={rows}
+                                        columns={columns}
+                                        onCellClick={handleCellClick}
+                                        disableColumnMenu
+                                        sortModel={defaultSortModel}
+                                        sx={{ mb: 10 }}
+                                    />
+                                    <DisplayComponent
+                                        open={openDetail}
+                                        onClose={handleClose}
+                                        rowData={selectedRowData}
+                                        url={url}
+                                    />
+                                </div>
+                        }
+                    </div>
+                }
             </Container>
         </Box>
     )

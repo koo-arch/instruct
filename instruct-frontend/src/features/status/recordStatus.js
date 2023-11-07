@@ -9,23 +9,25 @@ import { Typography } from '@mui/material';
 const RecordStatus = () => {
     const currentTimetable = useSelector(state => state.currentTimetable)
     useWsCurrentTimetable();
-    
+
     const schoolPeriod = currentTimetable.period?.school_period
     const detail = currentTimetable.period?.detail
     const isLoading = currentTimetable.isLoading
-    
+
+    const isLoadingWebsocket = isLoading && !schoolPeriod && !detail
+
     return (
         <div>
-            {isLoading ?
-                <Loading open={isLoading && !schoolPeriod && !detail} />
+            {isLoadingWebsocket ?
+                <Loading open={isLoadingWebsocket} />
                 :
                 (schoolPeriod ?
                     <div>
                         <Typography component={"h1"} variant='h3' sx={{ mb: 3 }}>
                             {schoolPeriod}限巡回状況
                         </Typography>
-                        <PatrolStatus title="巡回時間記録"/>
-                        <CountUsersStatus title="利用人数記録"/>
+                        <PatrolStatus title="巡回時間記録" />
+                        <CountUsersStatus title="利用人数記録" />
                     </div>
                     :
                     <Typography component={"h1"} variant='h3'>

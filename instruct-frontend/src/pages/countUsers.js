@@ -9,15 +9,23 @@ import useWsCurrentTimetable from '../hooks/useWsCurrentTimetable';
 import CountUsersStatus from '../features/status/countUsersStatus';
 import CreateCountUsersRecord from '../features/countUsersRecord/createCountUsersRecord';
 import FetchCountUsersRecords from '../features/countUsersRecord/fetchCountUsersRecords';
+import Loading from '../components/loading';
 
 
 const CountUsers = () => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+    const currentTimetable = useSelector(state => state.currentTimetable)
     const { snackbarStatus } = useCustomContext();
     const isMobileSize = useMediaQuery('(max-width: 500px');
     const openRef = useRef();
 
     useWsCurrentTimetable()
+
+    const schoolPeriod = currentTimetable.period?.school_period
+    const detail = currentTimetable.period?.detail
+    const isLoading = currentTimetable.isLoading
+
+    const isLoadingWebsocket = isLoading && !schoolPeriod && !detail
 
     const openCreateRecord = () => openRef.current.click();
     return (
@@ -38,15 +46,23 @@ const CountUsers = () => {
                         </Grid>
                     }
                 </Grid>
-                {
-                    isMobileSize ?
-                        <CountUsersStatus title="巡回状況"/>
-                    :
-                    <AccordionMenu section="巡回状況">
-                        <CountUsersStatus />
-                    </AccordionMenu>
-                }
             </Container>
+            {isLoadingWebsocket ?
+                <Loading open={isLoadingWebsocket} />
+                :
+                <div>
+                    {
+                        isMobileSize ?
+                            <CountUsersStatus title="巡回状況" />
+                            :
+                            <Container>
+                                <AccordionMenu section="巡回状況">
+                                    <CountUsersStatus />
+                                </AccordionMenu>
+                            </Container>
+                    }
+                </div>
+            }
             <FetchCountUsersRecords />
             <CreateCountUsersRecord create={openRef} />
             <CustomSnackbar {...snackbarStatus} />

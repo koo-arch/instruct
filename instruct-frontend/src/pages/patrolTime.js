@@ -9,15 +9,23 @@ import useWsCurrentTimetable from '../hooks/useWsCurrentTimetable';
 import PatrolStatus from '../features/status/patrolStatus';
 import CreatePatrolRecord from '../features/patrolTime/createPatrolRecord';
 import FetchPatrolRecords from '../features/patrolTime/fetchPatrolRecords';
+import Loading from '../components/loading';
 
 
 const PatrolTime = () => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+    const currentTimetable = useSelector(state => state.currentTimetable)
     const { snackbarStatus } = useCustomContext();
     const isMobileSize = useMediaQuery('(max-width: 500px');
     const openRef = useRef();
 
     useWsCurrentTimetable();
+
+    const schoolPeriod = currentTimetable.period?.school_period
+    const detail = currentTimetable.period?.detail
+    const isLoading = currentTimetable.isLoading
+
+    const isLoadingWebsocket = isLoading && !schoolPeriod && !detail
 
     const openCreateRecord = () => openRef.current.click();
     return (
@@ -38,15 +46,23 @@ const PatrolTime = () => {
                         </Grid>
                     }
                 </Grid>
-                {
-                    isMobileSize ?
-                        <PatrolStatus title="巡回状況"/>
-                    :
-                    <AccordionMenu section="巡回状況">
-                        <PatrolStatus />
-                    </AccordionMenu>
-                }
             </Container>
+            {isLoadingWebsocket ?
+                <Loading open={isLoadingWebsocket} />
+                :
+                <div>
+                    {
+                        isMobileSize ?
+                            <PatrolStatus title="巡回状況" />
+                            :
+                            <Container>
+                                <AccordionMenu section="巡回状況">
+                                    <PatrolStatus />
+                                </AccordionMenu>
+                            </Container>
+                    }
+                </div>
+            }
             <FetchPatrolRecords />
             <CreatePatrolRecord create={openRef} />
             <CustomSnackbar {...snackbarStatus} />
