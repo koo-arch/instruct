@@ -19,6 +19,7 @@ import {
     Toolbar,
 } from '@mui/material';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import HomeIcon from '@mui/icons-material/Home';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -49,6 +50,9 @@ const ResponsiveDrawer = ({ children }) => {
                     // ログインしている場合はユーザー名を表示するリストアイテム
                     <div>
                         <ListItemButton component={Link} to="/account" onClick={handleDrawerClose}>
+                            <ListItemIcon>
+                                <AccountBoxIcon />
+                            </ListItemIcon>
                             <ListItemText primary={user.username} />
                         </ListItemButton>
                     </div>

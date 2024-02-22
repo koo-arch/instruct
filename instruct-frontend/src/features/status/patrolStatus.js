@@ -20,6 +20,7 @@ const PatrolStatus = ({ title }) => {
       rows={patrolStatus.status}
       columns={columns}
       title={title}
+      isLoading={patrolStatus.isLoading}
     />
   )
 }

@@ -34,7 +34,7 @@ const Register = () => {
         postRegister(data)
             .then(res =>  {
                 console.log(res.data)
-                navigation('/login');
+                navigation('/activate/send');
                 setSnackbarStatus({
                     open: true,
                     severity: "success",

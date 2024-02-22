@@ -6,6 +6,7 @@ import Top from './pages/top';
 import Login from './pages/login';
 import Register from './pages/register';
 import Activation from './pages/activation';
+import SendActivation from './pages/sendActivation';
 import ResendActivation from './pages/resendActivation';
 import Account from './pages/account';
 import ResetPassword from './pages/resetPassword';
@@ -51,6 +52,7 @@ const App = () => {
               <Route path='/login' element={<Login/>}/>
               <Route path='/register' element={<Register/>}/>
               <Route path='/activate/:uid/:token' element={<Activation/>}/>
+              <Route path='/activate/send' element={<SendActivation />} />
               <Route path='/activate/resend' element={<ResendActivation/>}/>
               <Route path='/account' element={<Account/>}/>
 

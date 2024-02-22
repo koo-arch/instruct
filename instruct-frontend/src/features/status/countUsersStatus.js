@@ -19,6 +19,7 @@ const CountUsersStatus = ({ title }) => {
             rows={countUsersStatus.status}
             columns={columns}
             title={title}
+            isLoading={countUsersStatus.isLoading}
         />
     )
 }

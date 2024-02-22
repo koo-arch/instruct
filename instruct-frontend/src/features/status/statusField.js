@@ -2,8 +2,15 @@ import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Box, Typography, Container } from '@mui/material';
 
-const StatusField = ({ rows, columns, title }) => {
-    if (!rows.length) {
+const StatusField = ({ rows, columns, title, isLoading }) => {
+    if (isLoading) {
+        return (
+            <Typography component={"h2"} variant='h5' textAlign="center" sx={{ mt : 2, mb: 2 }}>
+                読み込み中...
+            </Typography>
+        )
+    }
+    else if (!rows.length) {
         return(
             <Typography component={"h2"} variant='h5' textAlign="center" sx={{ mt : 2, mb: 2 }}>
                 授業時間外
